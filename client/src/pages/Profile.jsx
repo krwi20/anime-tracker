@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+
 import {
 	getUserStart,
 	getUserSuccess,
@@ -18,7 +19,6 @@ const Profile = () => {
 	useEffect(() => {
 		const fetchUserData = async () => {
 			dispatch(getUserStart());
-
 			try {
 				const res = await fetch(
 					`http://localhost:3001/api/auth/test/${username}`,
@@ -47,15 +47,29 @@ const Profile = () => {
 	return (
 		<div className='bg-[#171717] border-t-white border-t-2 min-h-[calc(100vh-64px)] '>
 			{loading && <p className='text-[#ededed]'>Loading...</p>}
-			{fetchedUser && (
-				<div>
-					<h1 className='text-[#ededed]'>{fetchedUser.username}'s Profile</h1>
+			<div className='bg-[#202020] text-[#ededed] mx-6 mt-6 px-2 rounded-lg'>
+				<div className='flex justify-between'>
+					<h1>{fetchedUser.username}'s Profile</h1>
 					{currentUser && currentUser.username === fetchedUser.username && (
-						<p className='text-[#ededed]'>This is your own profile</p>
+						<button>Edit Profile</button>
 					)}
-					{currentUser.role === "admin" && <p>admin</p>}
 				</div>
-			)}
+				<div className='flex'>
+					{/* Left Side */}
+					<div className='pr-2'>
+						<img className='h-80 w-56' src={fetchedUser.profilePicture} />
+					</div>
+					{/* Right Side */}
+					<div className='flex flex-col border-l pl-2 h-screen'>
+						<div className=' '>
+							<p>No biography yet.</p>
+						</div>
+						<div>
+							<h1>test</h1>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	);
 };
