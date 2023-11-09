@@ -37,3 +37,14 @@ export const login = async (req, res, next) => {
 		next(error);
 	}
 };
+
+export const test = async (req, res, next) => {
+	try {
+		const { username } = req.params;
+		const user = await User.findOne({ username });
+		const { password, ...userData } = user._doc;
+		res.status(200).json(userData);
+	} catch (error) {
+		next(error);
+	}
+};

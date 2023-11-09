@@ -15,7 +15,10 @@ const NavBar = () => {
 						<p>Register</p>
 					</Link>
 				)}
-				<Link className='hover:text-red-500' to='/profile'>
+				<Link
+					className='hover:text-red-500'
+					to={`/profile/${currentUser.username}`}
+				>
 					{currentUser ? (
 						<div className='flex gap-4'>
 							<img

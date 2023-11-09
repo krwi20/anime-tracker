@@ -15,9 +15,10 @@ function App() {
 				<Route path='/' element={<Home />} />
 				<Route path='/register' element={<Register />} />
 				<Route path='/login' element={<Login />} />
-				<Route path='/profile' element={<PrivateRoute />}>
+				{/* <Route path='/profile/:username' element={<PrivateRoute />}>
 					<Route index element={<Profile />} />
-				</Route>
+				</Route> */}
+				<Route path='/profile/:username' element={<Profile />} />
 			</Routes>
 		</BrowserRouter>
 	);
