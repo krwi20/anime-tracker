@@ -1,7 +1,8 @@
-import User from "../models/user.js";
 import bcryptjs from "bcryptjs";
-import { errorHandler } from "../utils/error.js";
 import jwt from "jsonwebtoken";
+
+import { errorHandler } from "../utils/error.js";
+import User from "../models/user.js";
 
 export const register = async (req, res, next) => {
 	const { username, email, password, role } = req.body;
@@ -11,7 +12,6 @@ export const register = async (req, res, next) => {
 		await newUser.save();
 		res.status(201).json({ message: "User created successfully" });
 	} catch (error) {
-		// next(errorHandler(300, "something went wrong"));
 		next(error);
 	}
 };
@@ -30,7 +30,7 @@ export const login = async (req, res, next) => {
 		const { password: hashedPassword, ...rest } = validUser._doc;
 		const expiryDate = new Date(Date.now() + 3600000);
 		res
-			.cookie("acess_token", token, { httpOnly: true, expires: expiryDate })
+			.cookie("access_token", token, { httpOnly: true, expires: expiryDate })
 			.status(200)
 			.json(rest);
 	} catch (error) {

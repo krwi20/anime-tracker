@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
 	const [formData, setFormData] = useState({});
+	const [error, setError] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const navigate = useNavigate();
 
 	const handleChange = (e) => {
 		setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -11,13 +15,22 @@ const Register = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
+			setLoading(true);
+			setError(false);
 			const res = await axios.post(
 				"http://localhost:3001/api/auth/register",
 				formData
 			);
-			console.log(res.data);
+			const data = res.data;
+			setLoading(false);
+			if (data.success === false) {
+				setError(true);
+				return;
+			}
+			navigate("/login");
 		} catch (error) {
-			console.log(error);
+			setLoading(false);
+			setError(true);
 		}
 	};
 
@@ -32,6 +45,7 @@ const Register = () => {
 							id='username'
 							className='bg-[#202020] outline-none rounded-lg border-2 border-[#444444] h-8 focus:border-[#da0037] text-[#ededed] px-3'
 							onChange={handleChange}
+							required
 						/>
 						<input
 							type='email'
@@ -39,6 +53,7 @@ const Register = () => {
 							id='email'
 							className='bg-[#202020] outline-none rounded-lg border-2 border-[#444444] h-8 focus:border-[#da0037] text-[#ededed] px-3'
 							onChange={handleChange}
+							required
 						/>
 						<input
 							type='password'
@@ -46,11 +61,15 @@ const Register = () => {
 							id='password'
 							className='bg-[#202020] outline-none rounded-lg border-2 border-[#444444] h-8 focus:border-[#da0037] text-[#ededed] px-3'
 							onChange={handleChange}
+							required
 						/>
 						<button className='bg-[#202020] border-2 border-[#da0037] rounded-lg text-[#ededed] h-8 cursor-pointer hover:bg-[#da0037]'>
-							Sign Up
+							{loading ? "Loading..." : "Sign Up"}
 						</button>
 					</form>
+					<p className='text-red-700 mt-5'>
+						{error ? error.message || "Something went wrong!" : ""}
+					</p>
 				</div>
 			</div>
 		</div>

@@ -1,8 +1,20 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
+import {
+	signInStart,
+	signInSuccess,
+	signInFailure,
+} from "../redux/user/userSlice";
 
 const Login = () => {
 	const [formData, setFormData] = useState({});
+	const { loading, error } = useSelector((state) => state.user);
+
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
 
 	const handleChange = (e) => {
 		setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -11,13 +23,23 @@ const Login = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
-			const res = await axios.post(
-				"http://localhost:3001/api/auth/login",
-				formData
-			);
-			console.log(res.data);
+			dispatch(signInStart());
+			const res = await fetch("http://localhost:3001/api/auth/login", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(formData),
+			});
+			const data = await res.json();
+			if (data.success === false) {
+				dispatch(signInFailure(data));
+				return;
+			}
+			dispatch(signInSuccess(data));
+			navigate("/");
 		} catch (error) {
-			console.log(error);
+			dispatch(signInFailure(error));
 		}
 	};
 
@@ -26,13 +48,6 @@ const Login = () => {
 			<div className='bg-[#202020] rounded-lg'>
 				<div className='m-20'>
 					<form className='flex flex-col gap-4' onSubmit={handleSubmit}>
-						<input
-							type='text'
-							placeholder='Username'
-							id='username'
-							className='bg-[#202020] outline-none rounded-lg border-2 border-[#444444] h-8 focus:border-[#da0037] text-[#ededed] px-3'
-							onChange={handleChange}
-						/>
 						<input
 							type='email'
 							placeholder='Email'
@@ -48,9 +63,12 @@ const Login = () => {
 							onChange={handleChange}
 						/>
 						<button className='bg-[#202020] border-2 border-[#da0037] rounded-lg text-[#ededed] h-8 cursor-pointer hover:bg-[#da0037]'>
-							Login
+							{loading ? "Loading..." : "Login"}
 						</button>
 					</form>
+					<p className='text-red-700 mt-5'>
+						{error ? error.message || "Something went wrong!" : ""}
+					</p>
 				</div>
 			</div>
 		</div>
