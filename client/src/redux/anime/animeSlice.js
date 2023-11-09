@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-	fetchedAnime: null,
+	fetchedAllAnime: null,
+	fetchedSpecificAnime: null,
 	loading: false,
 	error: false,
 };
@@ -10,21 +11,39 @@ const animeSlice = createSlice({
 	name: "anime",
 	initialState,
 	reducers: {
-		getAnimeStart: (state) => {
+		getAllAnimeStart: (state) => {
 			state.loading = true;
 		},
-		getAnimeSuccess: (state, action) => {
-			state.fetchedAnime = action.payload;
+		getAllAnimeSuccess: (state, action) => {
+			state.fetchedAllAnime = action.payload;
 			state.loading = false;
 			state.error = null;
 		},
-		getAnimeFailure: (state, action) => {
+		getAllAnimeFailure: (state, action) => {
+			state.loading = false;
+			state.error = action.payload;
+		},
+		getSpecificAnimeStart: (state) => {
+			state.loading = true;
+		},
+		getSpecificAnimeSuccess: (state, action) => {
+			state.fetchedSpecificAnime = action.payload;
+			state.loading = false;
+			state.error = null;
+		},
+		getSpecificAnimeFailure: (state, action) => {
 			state.loading = false;
 			state.error = action.payload;
 		},
 	},
 });
 
-export const { getAnimeStart, getAnimeSuccess, getAnimeFailure } =
-	animeSlice.actions;
+export const {
+	getAllAnimeStart,
+	getAllAnimeSuccess,
+	getAllAnimeFailure,
+	getSpecificAnimeStart,
+	getSpecificAnimeSuccess,
+	getSpecificAnimeFailure,
+} = animeSlice.actions;
 export default animeSlice.reducer;

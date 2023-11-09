@@ -8,3 +8,12 @@ export const anime = async (req, res, next) => {
 		next(error);
 	}
 };
+
+export const specificAnime = async (req, res, next) => {
+	try {
+		const specificAnime = await Anime.findById(req.params.id);
+		res.status(201).json(specificAnime);
+	} catch (error) {
+		next(error);
+	}
+};
