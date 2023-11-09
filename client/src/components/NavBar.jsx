@@ -24,7 +24,7 @@ const NavBar = () => {
 						<div className='flex gap-4'>
 							<img
 								src={currentUser.profilePicture}
-								alt='profile'
+								alt='profile_picture'
 								className='h7 w-7 object-cover'
 							/>
 							<p>{currentUser.username}</p>

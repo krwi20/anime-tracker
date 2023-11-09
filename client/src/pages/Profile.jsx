@@ -18,6 +18,7 @@ const Profile = () => {
 
 	useEffect(() => {
 		const fetchUserData = async () => {
+			console.log("Fetching user data for", username);
 			dispatch(getUserStart());
 			try {
 				const res = await fetch(
@@ -30,6 +31,7 @@ const Profile = () => {
 					}
 				);
 				const data = await res.json();
+				console.log(data);
 				dispatch(getUserSuccess(data));
 				if (data.success === false) {
 					dispatch(getUserFailure("User not found!"));
@@ -42,34 +44,40 @@ const Profile = () => {
 		};
 
 		fetchUserData();
-	}, [dispatch, username]);
+	}, [dispatch, username, navigate]);
 
 	return (
 		<div className='bg-[#171717] border-t-white border-t-2 min-h-[calc(100vh-64px)] '>
 			{loading && <p className='text-[#ededed]'>Loading...</p>}
-			<div className='bg-[#202020] text-[#ededed] mx-6 mt-6 px-2 rounded-lg'>
-				<div className='flex justify-between'>
-					<h1>{fetchedUser.username}'s Profile</h1>
-					{currentUser && currentUser.username === fetchedUser.username && (
-						<button>Edit Profile</button>
-					)}
-				</div>
-				<div className='flex'>
-					{/* Left Side */}
-					<div className='pr-2'>
-						<img className='h-80 w-56' src={fetchedUser.profilePicture} />
+			{fetchedUser && (
+				<div className='bg-[#202020] text-[#ededed] mx-6 mt-6 px-2 rounded-lg'>
+					<div className='flex justify-between'>
+						<h1>{fetchedUser.username}'s Profile</h1>
+						{currentUser && currentUser.username === fetchedUser.username && (
+							<button>Edit Profile</button>
+						)}
 					</div>
-					{/* Right Side */}
-					<div className='flex flex-col border-l pl-2 h-screen'>
-						<div className=' '>
-							<p>No biography yet.</p>
+					<div className='flex'>
+						{/* Left Side */}
+						<div className='pr-2'>
+							<img
+								className='h-80 w-56'
+								src={fetchedUser.profilePicture}
+								alt='user_profile_image'
+							/>
 						</div>
-						<div>
-							<h1>test</h1>
+						{/* Right Side */}
+						<div className='flex flex-col border-l pl-2 h-screen'>
+							<div className=' '>
+								<p>No biography yet.</p>
+							</div>
+							<div>
+								<h1>test</h1>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
+			)}
 		</div>
 	);
 };

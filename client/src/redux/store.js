@@ -7,8 +7,9 @@ import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
 import userReducer from "./user/userSlice";
+import animeReducer from "./anime/animeSlice";
 
-const rootReducer = combineReducers({ user: userReducer });
+const rootReducer = combineReducers({ user: userReducer, anime: animeReducer });
 
 const persistConfig = {
 	key: "root",

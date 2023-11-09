@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 
 import authRoutes from "./routes/auth.js";
+import animeRoutes from "./routes/anime.js";
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ app.listen(3001, () => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/anime", animeRoutes);
 
 app.use((err, req, res, next) => {
 	const statusCode = err.statusCode || 500;
