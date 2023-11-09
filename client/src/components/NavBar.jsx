@@ -15,11 +15,12 @@ const NavBar = () => {
 						<p>Register</p>
 					</Link>
 				)}
-				<Link
-					className='hover:text-red-500'
-					to={`/profile/${currentUser.username}`}
-				>
-					{currentUser ? (
+
+				{currentUser ? (
+					<Link
+						className='hover:text-red-500'
+						to={`/profile/${currentUser.username}`}
+					>
 						<div className='flex gap-4'>
 							<img
 								src={currentUser.profilePicture}
@@ -28,10 +29,12 @@ const NavBar = () => {
 							/>
 							<p>{currentUser.username}</p>
 						</div>
-					) : (
+					</Link>
+				) : (
+					<Link className='hover:text-red-500' to='/login'>
 						<p>Sign In</p>
-					)}
-				</Link>
+					</Link>
+				)}
 			</div>
 		</div>
 	);

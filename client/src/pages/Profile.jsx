@@ -45,15 +45,15 @@ const Profile = () => {
 	}, [dispatch, username]);
 
 	return (
-		<div>
-			{loading && <p>Loading...</p>}
+		<div className='bg-[#171717] border-t-white border-t-2 min-h-[calc(100vh-64px)] '>
+			{loading && <p className='text-[#ededed]'>Loading...</p>}
 			{fetchedUser && (
 				<div>
-					<h1>{fetchedUser.username}'s Profile</h1>
+					<h1 className='text-[#ededed]'>{fetchedUser.username}'s Profile</h1>
 					{currentUser && currentUser.username === fetchedUser.username && (
-						<p>This is your own profile</p>
+						<p className='text-[#ededed]'>This is your own profile</p>
 					)}
-					{/* Render other user data here */}
+					{currentUser.role === "admin" && <p>admin</p>}
 				</div>
 			)}
 		</div>
