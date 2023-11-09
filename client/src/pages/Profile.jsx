@@ -11,7 +11,9 @@ const Profile = () => {
 	const { username } = useParams();
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const { currentUser, loading } = useSelector((state) => state.user);
+	const { currentUser, fetchedUser, loading } = useSelector(
+		(state) => state.user
+	);
 
 	useEffect(() => {
 		const fetchUserData = async () => {
@@ -45,9 +47,12 @@ const Profile = () => {
 	return (
 		<div>
 			{loading && <p>Loading...</p>}
-			{currentUser && (
+			{fetchedUser && (
 				<div>
-					<h1>{currentUser.username}'s Profile</h1>
+					<h1>{fetchedUser.username}'s Profile</h1>
+					{currentUser && currentUser.username === fetchedUser.username && (
+						<p>This is your own profile</p>
+					)}
 					{/* Render other user data here */}
 				</div>
 			)}
