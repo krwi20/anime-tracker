@@ -48,3 +48,22 @@ export const test = async (req, res, next) => {
 		next(error);
 	}
 };
+
+export const addTrackedAnime = async (req, res, next) => {
+	try {
+		const { userId, animeId, status, episodesWatched } = req.body;
+		const updateObj = {
+			[`trackedAnime.${animeId}`]: { animeId, status, episodesWatched },
+		};
+
+		await User.findByIdAndUpdate(userId, { $set: updateObj }, { new: true });
+
+		const updatedUser = await User.findById(userId);
+
+		res
+			.status(200)
+			.json({ message: "Anime added to trackedAnime", updatedUser });
+	} catch (error) {
+		next(error);
+	}
+};

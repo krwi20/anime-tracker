@@ -26,7 +26,22 @@ const userSchema = new mongoose.Schema(
 			enum: ["user", "admin"],
 			default: "user",
 		},
+		trackedAnime: {
+			type: Map,
+			of: {
+				status: {
+					type: String,
+					enum: ["Watching", "Completed"],
+					required: true,
+				},
+				episodesWatched: {
+					type: Number,
+					required: true,
+				},
+			},
+		},
 	},
+
 	{ timestamps: true }
 );
 
