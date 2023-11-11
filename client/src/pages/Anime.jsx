@@ -80,32 +80,40 @@ const Anime = () => {
 	};
 
 	return (
-		<div className='bg-[#171717] min-h-[calc(100vh-64px)] '>
+		// Anime Content
+		<div className='bg-[#171717] min-h-[calc(100vh-64px)] p-2'>
 			{loading && <p className='text-[#ededed]'>Loading...</p>}
 			{fetchedSpecificAnime && (
-				<div className='bg-[#202020] text-[#ededed] mx-6 mt-6 px-2 rounded-lg'>
-					<div className='border-b border-[#ededed] border-opacity-25 mb-2'>
+				// Anime Content Container
+				<div className='bg-[#202020] text-[#ededed] mx-6 mt-6 px-4 py-3 rounded-lg'>
+					{/* Title Container */}
+					<div className='mb-2'>
 						<h1 className='text-white'>{fetchedSpecificAnime.title}</h1>
 						<h1>{fetchedSpecificAnime.title_jp}</h1>
+						{/* Border */}
+						<div className='bg-gradient-to-br from-purple-500 to-pink-500 h-0.5'></div>
 					</div>
+					{/* Details Container */}
 					<div className='flex gap-2'>
 						{/* Left Side */}
-						<div className='flex flex-col w-72 gap-2'>
+						<div className='flex flex-col w-72 gap-1.5'>
 							<img
 								src={fetchedSpecificAnime.customImageURL}
 								alt='anime_cover'
 								className='mb-2'
 							/>
-							<p className='text-md border-b border-[#da0037]'>
-								Alternative Titles
-							</p>
+							<p className='text-md'>Alternative Titles</p>
+							{/* Border */}
+							<div className='bg-gradient-to-br from-purple-500 to-pink-500 h-0.5'></div>
 							<p className='text-xs font-bold whitespace-nowrap'>
 								Japanese:{" "}
 								<span className='font-normal'>
 									{fetchedSpecificAnime.title_jp}
 								</span>
 							</p>
-							<p className='text-md border-b border-[#da0037]'>Information</p>
+							<p className='text-md'>Information</p>
+							{/* Border */}
+							<div className='bg-gradient-to-br from-purple-500 to-pink-500 h-0.5'></div>
 							<p className='text-xs font-bold whitespace-nowrap'>
 								Type:{" "}
 								<span className='font-normal'>{fetchedSpecificAnime.type}</span>
@@ -149,51 +157,54 @@ const Anime = () => {
 								</span>
 							</p>
 						</div>
+						{/* Middle */}
+						{/* Border */}
+						<div className='bg-gradient-to-br from-purple-500 to-pink-500 w-0.5'></div>
 						{/* Right Side */}
-						<div className='flex flex-col border-l border-[#ededed] border-opacity-25 pl-2 w-full'>
-							<div className='flex gap-4 bg-[#171717] p-4 rounded-md w-fit'>
-								<button className='bg-[#da0037] w-fit px-2 py-1 rounded-lg text-xs flex items-center'>
-									<FiPlusSquare />
-									<span className='ml-1'>Add to List</span>
+						<div className='flex flex-col pl-2 w-full'>
+							{/* Tracking Container */}
+							<div className='flex gap-4 bg-[#171717] pt-2 px-2 rounded-md w-fit'>
+								<button className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'>
+									<span className='flex items-center gap-2 relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0'>
+										{<FiPlusSquare />} Add to List
+									</span>
 								</button>
-								<select
-									className='bg-[#da0037] text-xs px-2 py-1 rounded-lg'
-									name='Select'
-									id=''
-								>
-									<option value=''>Select</option>
-									<option value=''>(10) Masterpiece</option>
-									<option value=''>(9) Great</option>
-									<option value=''>(8) Very Good</option>
-									<option value=''>(7) Good</option>
-									<option value=''>(6) Fine</option>
-									<option value=''>(5) Average</option>
-									<option value=''>(4) Bad</option>
-									<option value=''>(3) Very Bad</option>
-									<option value=''>(2) Horrible</option>
-									<option value=''>(1) Appaling</option>
-								</select>
-								<div className='bg-[#da0037] text-xs px-2 py-1 rounded-lg flex items-center'>
-									Episodes:
-									<input
-										className='bg-[#da0037] text-[#ededed] text-right w-6 '
-										type='text'
-										value={
-											currentUser &&
-											currentUser.trackedAnime &&
-											currentUser.trackedAnime[id]
-												? currentUser.trackedAnime[id].episodesWatched || 0
-												: 0
-										}
-									/>{" "}
-									/ <span>{fetchedSpecificAnime.episodes}</span>
-									<button onClick={boop} className='ml-2'>
+								{/* Select Container */}
+								<button className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'>
+									<p className='relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0'>
+										Rate Anime: 0
+									</p>
+								</button>
+								{/* Episode Container */}
+								<div className='cursor-pointer relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'>
+									<div className='flex items-center relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0'>
+										Episodes:
+										<input
+											className='text-right w-2 outline-none border-none bg-transparent text-gray-900 dark:text-white ml-2'
+											type='text'
+											value={
+												currentUser &&
+												currentUser.trackedAnime &&
+												currentUser.trackedAnime[id]
+													? currentUser.trackedAnime[id].episodesWatched || 0
+													: 0
+											}
+										/>{" "}
+										/{" "}
+										<span className='mr-2'>
+											{fetchedSpecificAnime.episodes}
+										</span>
 										<FiPlusCircle />
-									</button>
+									</div>
 								</div>
 							</div>
-							<h1 className='border-b border-[#da0037]'>Description</h1>
-							<p>{fetchedSpecificAnime.description}</p>
+							{/* Description Container */}
+							<div>
+								<h1 className='text-xl'>Description</h1>
+								{/* Border */}
+								<div className='bg-gradient-to-br from-purple-500 to-pink-500 h-0.5'></div>
+								<p>{fetchedSpecificAnime.description}</p>
+							</div>
 						</div>
 					</div>
 				</div>

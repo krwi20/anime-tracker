@@ -17,7 +17,7 @@ const NavBar = () => {
 					<div className='flex gap-8 text-xl pt-2'>
 						{!currentUser && (
 							<Link
-								className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800'
+								className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'
 								to='/register'
 							>
 								<p className='relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0'>
@@ -25,24 +25,24 @@ const NavBar = () => {
 								</p>
 							</Link>
 						)}
-
+						{/* Signed In User */}
 						{currentUser ? (
-							<Link
-								className='hover:text-[#da0037]'
-								to={`/profile/${currentUser.username}`}
-							>
-								<div className='flex gap-4'>
+							<div className='relative inline-flex items-center justify-center mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'>
+								<Link
+									className='flex items-center'
+									to={`/profile/${currentUser.username}`}
+								>
 									<img
 										src={currentUser.profilePicture}
 										alt='profile_picture'
-										className='h7 w-7 object-cover'
+										className='h-10 w-10 object-cover'
 									/>
-									<p>{currentUser.username}</p>
-								</div>
-							</Link>
+									<p className='relative px-5 '>{currentUser.username}</p>
+								</Link>
+							</div>
 						) : (
 							<Link
-								className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800'
+								className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'
 								to='/login'
 							>
 								<p className='relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0'>

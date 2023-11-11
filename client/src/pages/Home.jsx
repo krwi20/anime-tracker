@@ -56,14 +56,19 @@ const Home = () => {
 
 	return (
 		// Home Content
-		<div className='bg-[#171717] text-[#ededed] min-h-[calc(100vh-64px)]'>
+		<div className='bg-[#171717] text-[#ededed] min-h-[calc(100vh-64px)] p-2'>
 			{loading && <p className='text-[#ededed]'>Loading...</p>}
-			{/* Seasonal Anime */}
+
 			{fetchedAllAnime && (
-				<div className=' bg-[#202020] rounded-lg p-8'>
-					<h2 className='ml-4 text-2xl border-b-2 pb-2'>
+				// Seasonal Anime Container
+				<div className=' bg-[#202020] rounded-lg p-1 m-4'>
+					<h2 className='ml-4 text-3xl p-2'>
 						{getSeason()} Anime {new Date().getFullYear()}
 					</h2>
+					{/* Border */}
+					<div className='bg-gradient-to-br from-purple-500 to-pink-500 h-0.5 mx-4'></div>
+					{/* Anime Cards */}
+
 					<div className='flex gap-4 m-4'>
 						{fetchedAllAnime
 							.filter(
