@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import PrivateRoute from "./components/PrivateRoute";
 import Anime from "./pages/Anime";
+import Settings from "./pages/Settings";
 
 function App() {
 	return (
@@ -21,6 +22,7 @@ function App() {
 				</Route> */}
 				<Route path='/profile/:username' element={<Profile />} />
 				<Route path='/anime/:id' element={<Anime />} />
+				<Route path='/settings' element={<Settings />} />
 			</Routes>
 		</BrowserRouter>
 	);

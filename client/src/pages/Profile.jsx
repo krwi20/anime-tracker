@@ -47,7 +47,7 @@ const Profile = () => {
 	}, [dispatch, username, navigate]);
 
 	return (
-		<div className='bg-[#171717] border-t-white border-t-2 min-h-[calc(100vh-64px)] '>
+		<div className='bg-[#171717] p-2 min-h-[calc(100vh-64px)] '>
 			{loading && <p className='text-[#ededed]'>Loading...</p>}
 			{fetchedUser && (
 				<div className='bg-[#202020] text-[#ededed] mx-6 mt-6 px-2 rounded-lg'>
