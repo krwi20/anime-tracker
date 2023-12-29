@@ -33,7 +33,6 @@ const EditAnime = () => {
 					body: JSON.stringify(updatedAnimeData),
 				}
 			);
-			console.log(updatedAnimeData);
 			const data = await res.json();
 			if (data.success === false) {
 				dispatch(updateSpecificAnimeFailure(data));
@@ -113,7 +112,7 @@ const EditAnime = () => {
 			</form>
 			{/* Apply Changes */}
 			<button
-				className="className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'"
+				className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'
 				type='button'
 				onClick={() => test()}
 			>
@@ -123,7 +122,7 @@ const EditAnime = () => {
 			</button>
 			{/* Cancel Changes */}
 			<button
-				className="className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'"
+				className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'
 				type='button'
 				onClick={() => navigate(`/anime/${id}`)}
 			>

@@ -169,7 +169,7 @@ const Anime = () => {
 						{/* Right Side */}
 						<div className='flex flex-col pl-2 w-full'>
 							{/* Tracking Container */}
-							{currentUser && currentUser.trackedAnime && (
+							{currentUser ? (
 								<div className='flex flex-col gap-4 bg-[#171717] pt-2 px-2 rounded-md w-fit'>
 									<div className='flex'>
 										<button
@@ -288,6 +288,30 @@ const Anime = () => {
 											</span>
 										</button>
 									</div>
+								</div>
+							) : (
+								<div className='flex flex-col gap-4 bg-[#171717] pt-2 px-4 rounded-md w-fit h-14 justify-center'>
+									<p>
+										Want to track anime and create your own list?{" "}
+										<button
+											className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'
+											onClick={() => navigate("/register")}
+										>
+											<span className='flex items-center gap-2 relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0 text-white'>
+												Sign up
+											</span>
+										</button>
+										or{" "}
+										<button
+											className='relative inline-flex items-center justify-center p-0.5  mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'
+											onClick={() => navigate("/login")}
+										>
+											<span className='flex items-center gap-2 relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0 text-white'>
+												Login
+											</span>
+										</button>{" "}
+										now!
+									</p>
 								</div>
 							)}
 							{/* Description Container */}
