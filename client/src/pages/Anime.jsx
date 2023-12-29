@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
-import { FiPlusCircle, FiPlusSquare } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 
 import {
 	getSpecificAnimeStart,
@@ -20,6 +20,7 @@ const Anime = () => {
 	const { fetchedSpecificAnime, loading } = useSelector((state) => state.anime);
 	const { currentUser } = useSelector((state) => state.user);
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	const formatDate = (timestamp) => {
 		const date = new Date(timestamp);
@@ -90,6 +91,13 @@ const Anime = () => {
 					<div className='mb-2'>
 						<h1 className='text-white'>{fetchedSpecificAnime.title}</h1>
 						<h1>{fetchedSpecificAnime.title_jp}</h1>
+						{currentUser.role === "admin" ? (
+							<button onClick={() => navigate(`/edit/anime/${id}`)}>
+								Edit Anime
+							</button>
+						) : (
+							""
+						)}
 						{/* Border */}
 						<div className='bg-gradient-to-br from-purple-500 to-pink-500 h-0.5'></div>
 					</div>

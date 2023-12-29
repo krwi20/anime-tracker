@@ -8,6 +8,7 @@ import Profile from "./pages/Profile";
 import PrivateRoute from "./components/PrivateRoute";
 import Anime from "./pages/Anime";
 import Settings from "./pages/Settings";
+import EditAnime from "./pages/EditAnime";
 
 function App() {
 	return (
@@ -23,6 +24,9 @@ function App() {
 				<Route path='/profile/:username' element={<Profile />} />
 				<Route path='/anime/:id' element={<Anime />} />
 				<Route path='/settings' element={<Settings />} />
+				<Route path='/edit/anime/:id' element={<PrivateRoute />}>
+					<Route index element={<EditAnime />} />
+				</Route>
 			</Routes>
 		</BrowserRouter>
 	);

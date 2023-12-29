@@ -17,3 +17,20 @@ export const specificAnime = async (req, res, next) => {
 		next(error);
 	}
 };
+
+export const updateSpecificAnime = async (req, res, next) => {
+	try {
+		const updateSpecificAnime = await Anime.findById(req.params.id);
+
+		updateSpecificAnime.title = req.body.title;
+		updateSpecificAnime.title_jp = req.body.title_jp;
+		updateSpecificAnime.description = req.body.description;
+		updateSpecificAnime.customImageURL = req.body.image;
+
+		const updatedAnime = await updateSpecificAnime.save();
+
+		res.status(201).json(updatedAnime);
+	} catch (error) {
+		next(error);
+	}
+};

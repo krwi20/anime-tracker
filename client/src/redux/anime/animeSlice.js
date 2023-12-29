@@ -35,6 +35,18 @@ const animeSlice = createSlice({
 			state.loading = false;
 			state.error = action.payload;
 		},
+		updateSpecificAnimeStart: (state) => {
+			state.loading = true;
+		},
+		updateSpecificAnimeSuccess: (state, action) => {
+			state.fetchedSpecificAnime = action.payload;
+			state.loading = false;
+			state.error = null;
+		},
+		updateSpecificAnimeFailure: (state, action) => {
+			state.loading = false;
+			state.error = action.payload;
+		},
 	},
 });
 
@@ -45,5 +57,8 @@ export const {
 	getSpecificAnimeStart,
 	getSpecificAnimeSuccess,
 	getSpecificAnimeFailure,
+	updateSpecificAnimeStart,
+	updateSpecificAnimeSuccess,
+	updateSpecificAnimeFailure,
 } = animeSlice.actions;
 export default animeSlice.reducer;
