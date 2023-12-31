@@ -1,10 +1,11 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { FiSettings } from "react-icons/fi";
 
 const NavBar = () => {
 	const { currentUser } = useSelector((state) => state.user);
+	const navigate = useNavigate();
 
 	return (
 		// NavBar Container
@@ -26,6 +27,14 @@ const NavBar = () => {
 									Register
 								</p>
 							</Link>
+						)}
+						{/* test */}
+						{currentUser?.role === "admin" && (
+							<div>
+								<button onClick={() => navigate("/add/anime")}>
+									<span>Add Anime</span>
+								</button>
+							</div>
 						)}
 						{/* Signed In User */}
 						{currentUser ? (

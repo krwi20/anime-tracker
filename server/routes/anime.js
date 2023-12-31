@@ -4,6 +4,7 @@ import {
 	anime,
 	specificAnime,
 	updateSpecificAnime,
+	addAnime,
 } from "../controllers/anime.js";
 
 const router = express.Router();
@@ -11,5 +12,6 @@ const router = express.Router();
 router.get("/anime", anime);
 router.get("/anime/:id", specificAnime);
 router.patch("/anime/edit/:id", updateSpecificAnime);
+router.post("/anime/add", addAnime);
 
 export default router;

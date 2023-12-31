@@ -131,9 +131,13 @@ const Anime = () => {
 								</span>
 							</p>
 							<p className='text-xs font-bold whitespace-nowrap'>
-								Aired:{" "}
+								Aired: <br />
 								<span className='font-normal'>
-									{formatDate(fetchedSpecificAnime.airedFrom)}
+									From: {formatDate(fetchedSpecificAnime.airedFrom)}
+								</span>
+								<br />
+								<span className='font-normal'>
+									To: {formatDate(fetchedSpecificAnime.airedUntil)}
 								</span>
 							</p>
 							<p className='text-xs font-bold whitespace-nowrap'>

@@ -28,7 +28,10 @@ const animeSchema = new mongoose.Schema({
 		type: Boolean,
 	},
 	airedFrom: {
-		type: String,
+		type: Date,
+	},
+	airedUntil: {
+		type: Date,
 	},
 	duration: {
 		type: String,
@@ -45,7 +48,7 @@ const animeSchema = new mongoose.Schema({
 	year: {
 		type: Number,
 	},
-	producsers: {
+	producers: {
 		type: [String],
 	},
 	broadcast: {
