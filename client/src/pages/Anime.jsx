@@ -183,7 +183,7 @@ const Anime = () => {
 											<span
 												className={`flex items-center gap-2 relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0 
 									${
-										currentUser.trackedAnime[id]?.status === "Watching"
+										currentUser.trackedAnime?.[id]?.status === "Watching"
 											? "bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white"
 											: ""
 									}`}
@@ -198,7 +198,7 @@ const Anime = () => {
 											<span
 												className={`flex items-center gap-2 relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0 
 									${
-										currentUser.trackedAnime[id]?.status === "Completed"
+										currentUser.trackedAnime?.[id]?.status === "Completed"
 											? "bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white"
 											: ""
 									}`}
@@ -214,7 +214,7 @@ const Anime = () => {
 											<span
 												className={`flex items-center gap-2 relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0 
 									${
-										currentUser.trackedAnime[id]?.status === "On Hold"
+										currentUser.trackedAnime?.[id]?.status === "On Hold"
 											? "bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white"
 											: ""
 									}`}
@@ -230,7 +230,7 @@ const Anime = () => {
 											<span
 												className={`flex items-center gap-2 relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0 
 									${
-										currentUser.trackedAnime[id]?.status === "Plan to Watch"
+										currentUser.trackedAnime?.[id]?.status === "Plan to Watch"
 											? "bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white"
 											: ""
 									}`}
