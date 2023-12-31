@@ -89,3 +89,12 @@ export const addAnime = async (req, res, next) => {
 		next(error);
 	}
 };
+
+export const deleteAnime = async (req, res, next) => {
+	try {
+		const deleteAnime = await Anime.findByIdAndDelete(req.params.id);
+		res.status(201).json(deleteAnime);
+	} catch (error) {
+		next(error);
+	}
+};
