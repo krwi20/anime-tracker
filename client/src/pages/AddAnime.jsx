@@ -5,7 +5,7 @@ const AddAnime = () => {
 	const [formData, setFormData] = useState({
 		title: "",
 		title_jp: "",
-		description: "",
+		description: "Description not currently created...",
 		customImageURL:
 			"https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg",
 		type: "",

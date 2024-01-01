@@ -21,8 +21,8 @@ export const login = async (req, res, next) => {
 	try {
 		const validUser = await User.findOne({ email });
 		if (!validUser) return next(errorHandler(404, "User Not Found!"));
-		const validPasswod = bcryptjs.compareSync(password, validUser.password);
-		if (!validPasswod) return next(errorHandler(401, "Wrong Credentials!"));
+		const validPassword = bcryptjs.compareSync(password, validUser.password);
+		if (!validPassword) return next(errorHandler(401, "Wrong Credentials!"));
 		const token = jwt.sign(
 			{ id: validUser._id, role: validUser.role },
 			process.env.JWT_SECRET
@@ -51,9 +51,13 @@ export const test = async (req, res, next) => {
 
 export const addTrackedAnime = async (req, res, next) => {
 	try {
-		const { userId, animeId, status, episodesWatched } = req.body;
+		const { userId, animeId, status, timeUpdated } = req.body;
 		const updateObj = {
-			[`trackedAnime.${animeId}`]: { animeId, status, episodesWatched },
+			[`trackedAnime.${animeId}`]: {
+				animeId,
+				status,
+				timeUpdated,
+			},
 		};
 
 		await User.findByIdAndUpdate(userId, { $set: updateObj }, { new: true });
@@ -63,6 +67,69 @@ export const addTrackedAnime = async (req, res, next) => {
 		res
 			.status(200)
 			.json({ message: "Anime added to trackedAnime", updatedUser });
+	} catch (error) {
+		next(error);
+	}
+};
+
+export const removeTrackedAnime = async (req, res, next) => {
+	const userId = req.params.userId;
+	const animeId = req.params.animeId;
+	try {
+		await User.findByIdAndUpdate(
+			userId,
+			{ $unset: { [`trackedAnime.${animeId}`]: 1 } },
+			{ new: true }
+		);
+		const updatedUser = await User.findById(userId);
+		res.status(200).json(updatedUser);
+	} catch (error) {
+		next(error);
+	}
+};
+
+export const updateTrackedAnime = async (req, res, next) => {
+	try {
+		const { userId, animeId, rating, timeUpdated } = req.body;
+
+		const ratingNumber = parseFloat(rating);
+
+		const updateObj = {
+			$set: {
+				[`trackedAnime.${animeId}.rating`]: ratingNumber,
+				[`trackedAnime.${animeId}.timeUpdated`]: timeUpdated,
+			},
+		};
+
+		console.log(updateObj);
+
+		await User.findByIdAndUpdate(userId, updateObj, { new: true });
+
+		const updatedUser = await User.findById(userId);
+		res.status(200).json({ message: "Anime rating updated", updatedUser });
+	} catch (error) {
+		next(error);
+	}
+};
+
+export const updateEpisodesWatched = async (req, res, next) => {
+	try {
+		const { userId, animeId, episodesWatched, timeUpdated } = req.body;
+
+		const episodesNumber = parseFloat(episodesWatched);
+
+		const updateObj = {
+			$set: {
+				[`trackedAnime.${animeId}.episodesWatched`]: episodesNumber,
+				[`trackedAnime.${animeId}.timeUpdated`]: timeUpdated,
+			},
+		};
+
+		await User.findByIdAndUpdate(userId, updateObj, { new: true });
+
+		const updatedUser = await User.findById(userId);
+
+		res.status(200).json({ message: "Anime rating updated", updatedUser });
 	} catch (error) {
 		next(error);
 	}

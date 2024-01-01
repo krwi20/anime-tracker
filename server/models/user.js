@@ -38,6 +38,15 @@ const userSchema = new mongoose.Schema(
 					type: Number,
 					required: true,
 				},
+				timeUpdated: {
+					type: Date,
+					required: true,
+				},
+				rating: {
+					type: Number,
+					required: false,
+					default: 0,
+				},
 			},
 		},
 	},

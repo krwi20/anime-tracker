@@ -65,11 +65,126 @@ const Anime = () => {
 					userId: currentUser._id,
 					animeId: id,
 					status: status,
-					episodesWatched: 4,
+					timeUpdated: new Date(),
 				}),
 			});
 
 			const data = await res.json();
+			if (data.success === false) {
+				dispatch(updateUserFailure(data));
+				return;
+			}
+			dispatch(updateUserSuccess(data.updatedUser));
+		} catch (error) {
+			dispatch(updateUserFailure(error));
+		}
+	};
+
+	const updateAnimeRating = async (rating) => {
+		try {
+			dispatch(updateUserStart());
+			const res = await fetch(`http://localhost:3001/api/auth/update`, {
+				method: "PATCH",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					userId: currentUser._id,
+					animeId: id,
+					rating: rating,
+					timeUpdated: new Date(),
+				}),
+			});
+			const data = await res.json();
+			if (data.success === false) {
+				dispatch(updateUserFailure(data));
+				return;
+			}
+			dispatch(updateUserSuccess(data.updatedUser));
+		} catch (error) {
+			dispatch(updateUserFailure(error));
+		}
+	};
+
+	const removeAnime = async () => {
+		try {
+			dispatch(updateUserStart());
+			const res = await fetch(
+				`http://localhost:3001/api/auth/remove/${currentUser._id}/${fetchedSpecificAnime._id}`,
+				{
+					method: "DELETE",
+					headers: {
+						"Content-Type": "application/json",
+					},
+				}
+			);
+			const data = await res.json();
+			if (data.success === false) {
+				dispatch(updateUserFailure(data));
+				return;
+			}
+			dispatch(updateUserSuccess(data));
+		} catch (error) {
+			dispatch(updateUserFailure(error));
+		}
+	};
+
+	const updateEpisodesWatched = async (e) => {
+		let value = e.target.value;
+		if (value > fetchedSpecificAnime.episodes) {
+			value = fetchedSpecificAnime.episodes;
+		} else if (value < 0) {
+			value = 0;
+		}
+		try {
+			await new Promise((resolve) => setTimeout(resolve, 500));
+
+			dispatch(updateUserStart());
+			const res = await fetch(`http://localhost:3001/api/auth/updateEpisodes`, {
+				method: "PATCH",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					userId: currentUser._id,
+					animeId: id,
+					episodesWatched: value,
+					timeUpdated: new Date(),
+				}),
+			});
+			const data = await res.json();
+			console.log(data);
+			if (data.success === false) {
+				dispatch(updateUserFailure(data));
+				return;
+			}
+			dispatch(updateUserSuccess(data.updatedUser));
+		} catch (error) {
+			dispatch(updateUserFailure(error));
+		}
+	};
+
+	const updateEpisodesWatchedByOne = async () => {
+		let value = currentUser.trackedAnime?.[id]?.episodesWatched + 1;
+		if (value > fetchedSpecificAnime.episodes) {
+			value = fetchedSpecificAnime.episodes;
+		}
+		try {
+			dispatch(updateUserStart());
+			const res = await fetch(`http://localhost:3001/api/auth/updateEpisodes`, {
+				method: "PATCH",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					userId: currentUser._id,
+					animeId: id,
+					episodesWatched: value,
+					timeUpdated: new Date(),
+				}),
+			});
+			const data = await res.json();
+			console.log(data);
 			if (data.success === false) {
 				dispatch(updateUserFailure(data));
 				return;
@@ -99,7 +214,6 @@ const Anime = () => {
 						{/* Border */}
 						<div className='bg-gradient-to-br from-purple-500 to-pink-500 h-0.5'></div>
 					</div>
-					{/* Details Container */}
 					<div className='flex gap-2'>
 						{/* Left Side */}
 						<div className='flex flex-col w-72 gap-1.5'>
@@ -175,7 +289,7 @@ const Anime = () => {
 							{/* Tracking Container */}
 							{currentUser ? (
 								<div className='flex flex-col gap-4 bg-[#171717] pt-2 px-2 rounded-md w-fit'>
-									<div className='flex'>
+									<div className='flex justify-between'>
 										<button
 											onClick={() => boop("Watching")}
 											className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'
@@ -239,57 +353,197 @@ const Anime = () => {
 												Plan to Watch
 											</span>
 										</button>
+										<button
+											onClick={removeAnime}
+											className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'
+										>
+											<span
+												className={
+													"flex items-center gap-2 relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0"
+												}
+											>
+												{" "}
+												Remove
+											</span>
+										</button>
 									</div>
 									<div>
-										<button className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'>
-											<span className='flex items-center gap-2 relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0'>
+										<button
+											className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'
+											onClick={() => updateAnimeRating(10)}
+										>
+											<span
+												className={`flex items-center gap-2 relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0 
+									${
+										currentUser.trackedAnime?.[id]?.rating === 10
+											? "bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white"
+											: ""
+									}`}
+											>
+												{" "}
 												10
 											</span>
 										</button>
-										<button className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'>
-											<span className='flex items-center gap-2 relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0'>
+										<button
+											className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'
+											onClick={() => updateAnimeRating(9)}
+										>
+											<span
+												className={`flex items-center gap-2 relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0 
+									${
+										currentUser.trackedAnime?.[id]?.rating === 9
+											? "bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white"
+											: ""
+									}`}
+											>
+												{" "}
 												9
 											</span>
 										</button>
-										<button className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'>
-											<span className='flex items-center gap-2 relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0'>
+										<button
+											className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'
+											onClick={() => updateAnimeRating(8)}
+										>
+											<span
+												className={`flex items-center gap-2 relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0 
+									${
+										currentUser.trackedAnime?.[id]?.rating === 8
+											? "bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white"
+											: ""
+									}`}
+											>
+												{" "}
 												8
 											</span>
 										</button>
-										<button className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'>
-											<span className='flex items-center gap-2 relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0'>
+										<button
+											className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'
+											onClick={() => updateAnimeRating(7)}
+										>
+											<span
+												className={`flex items-center gap-2 relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0 
+									${
+										currentUser.trackedAnime?.[id]?.rating === 7
+											? "bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white"
+											: ""
+									}`}
+											>
+												{" "}
 												7
 											</span>
 										</button>
-										<button className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'>
-											<span className='flex items-center gap-2 relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0'>
+										<button
+											className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'
+											onClick={() => updateAnimeRating(6)}
+										>
+											<span
+												className={`flex items-center gap-2 relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0 
+									${
+										currentUser.trackedAnime?.[id]?.rating === 6
+											? "bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white"
+											: ""
+									}`}
+											>
+												{" "}
 												6
 											</span>
 										</button>
-										<button className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'>
-											<span className='flex items-center gap-2 relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0'>
+										<button
+											className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'
+											onClick={() => updateAnimeRating(5)}
+										>
+											<span
+												className={`flex items-center gap-2 relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0 
+									${
+										currentUser.trackedAnime?.[id]?.rating === 5
+											? "bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white"
+											: ""
+									}`}
+											>
+												{" "}
 												5
 											</span>
 										</button>
-										<button className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'>
-											<span className='flex items-center gap-2 relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0'>
+										<button
+											className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'
+											onClick={() => updateAnimeRating(4)}
+										>
+											<span
+												className={`flex items-center gap-2 relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0 
+									${
+										currentUser.trackedAnime?.[id]?.rating === 4
+											? "bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white"
+											: ""
+									}`}
+											>
+												{" "}
 												4
 											</span>
 										</button>
-										<button className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'>
-											<span className='flex items-center gap-2 relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0'>
+										<button
+											className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'
+											onClick={() => updateAnimeRating(3)}
+										>
+											<span
+												className={`flex items-center gap-2 relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0 
+									${
+										currentUser.trackedAnime?.[id]?.rating === 3
+											? "bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white"
+											: ""
+									}`}
+											>
+												{" "}
 												3
 											</span>
 										</button>
-										<button className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'>
-											<span className='flex items-center gap-2 relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0'>
+										<button
+											className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'
+											onClick={() => updateAnimeRating(2)}
+										>
+											<span
+												className={`flex items-center gap-2 relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0 
+									${
+										currentUser.trackedAnime?.[id]?.rating === 2
+											? "bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white"
+											: ""
+									}`}
+											>
+												{" "}
 												2
 											</span>
 										</button>
-										<button className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'>
-											<span className='flex items-center gap-2 relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0'>
+										<button
+											className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'
+											onClick={() => updateAnimeRating(1)}
+										>
+											<span
+												className={`flex items-center gap-2 relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0 
+									${
+										currentUser.trackedAnime?.[id]?.rating === 1
+											? "bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white"
+											: ""
+									}`}
+											>
+												{" "}
 												1
 											</span>
+										</button>
+									</div>
+									<div className='flex justify-center items-center gap-2 mb-2'>
+										<h1>Episodes</h1>
+										<input
+											type='number'
+											min='0'
+											max={fetchedSpecificAnime.episodes}
+											placeholder={
+												currentUser.trackedAnime?.[id]?.episodesWatched
+											}
+											onChange={(e) => updateEpisodesWatched(e)}
+											className='bg-[#171717] outline-none rounded-lg border-2 border-[#444444] h-8 focus:border-purple-500 text-[#ededed] px-3 w-16'
+										/>
+										<h1>/ {fetchedSpecificAnime.episodes}</h1>
+										<button onClick={updateEpisodesWatchedByOne}>
+											<h1>+</h1>
 										</button>
 									</div>
 								</div>
