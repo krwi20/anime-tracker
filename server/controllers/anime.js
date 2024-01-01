@@ -98,3 +98,18 @@ export const deleteAnime = async (req, res, next) => {
 		next(error);
 	}
 };
+
+export const searchAnime = async (req, res, next) => {
+	try {
+		const query = req.query.query;
+
+		const regex = new RegExp(`^${query}`, "i");
+
+		const matchingAnime = await Anime.find({ title: regex });
+
+		res.status(200).json(matchingAnime);
+	} catch (error) {
+		console.error(error);
+		next(error);
+	}
+};

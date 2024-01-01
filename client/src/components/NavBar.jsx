@@ -1,11 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { FiSettings } from "react-icons/fi";
 
 const NavBar = () => {
 	const { currentUser } = useSelector((state) => state.user);
+	const [searchResults, setSearchResults] = useState([]);
+	const [query, setQuery] = useState("");
 	const navigate = useNavigate();
+
+	const handleAnimeSearch = async (e) => {
+		// const query = "Ao no Exorcist: Shimane Illuminati-hen";
+		const query = e.target.value;
+		setQuery(query);
+
+		if (!query.trim()) {
+			setSearchResults([]);
+			return;
+		}
+		try {
+			const res = await fetch(
+				`http://localhost:3001/api/anime/anime/search?query=${query}`,
+				{
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+					},
+				}
+			);
+			const data = await res.json();
+			setSearchResults(data);
+		} catch (error) {
+			console.log(error);
+		}
+	};
 
 	return (
 		// NavBar Container
@@ -28,6 +56,34 @@ const NavBar = () => {
 								</p>
 							</Link>
 						)}
+						{/* Search Bar */}
+						<div>
+							<input
+								className='text-black'
+								type='text'
+								placeholder='search'
+								value={query}
+								onChange={(e) => handleAnimeSearch(e)}
+							/>
+							<button onClick={handleAnimeSearch}>TEST</button>
+							{searchResults.length > 0 && (
+								<ul>
+									{searchResults.map((result) => (
+										<li
+											key={result._id}
+											className='cursor-pointer'
+											onClick={() => {
+												navigate(`/anime/${result._id}`);
+												setQuery("");
+												setSearchResults([]);
+											}}
+										>
+											{result.title}
+										</li>
+									))}
+								</ul>
+							)}
+						</div>
 						{/* test */}
 						{currentUser?.role === "admin" && (
 							<div>

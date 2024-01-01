@@ -6,11 +6,13 @@ import {
 	updateSpecificAnime,
 	addAnime,
 	deleteAnime,
+	searchAnime,
 } from "../controllers/anime.js";
 
 const router = express.Router();
 
 router.get("/anime", anime);
+router.get("/anime/search", searchAnime);
 router.get("/anime/:id", specificAnime);
 router.patch("/anime/edit/:id", updateSpecificAnime);
 router.post("/anime/add", addAnime);

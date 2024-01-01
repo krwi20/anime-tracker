@@ -51,7 +51,7 @@ const Anime = () => {
 		};
 
 		fetchSpecificAnime();
-	}, [dispatch]);
+	}, [dispatch, id]);
 
 	const boop = async (status) => {
 		try {
