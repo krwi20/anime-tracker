@@ -57,21 +57,20 @@ const NavBar = () => {
 							</Link>
 						)}
 						{/* Search Bar */}
-						<div>
+						<div className=''>
 							<input
-								className='text-black'
+								className='bg-[#171717] outline-none rounded-lg border-2 border-[#444444] h-11 focus:border-purple-500 text-[#ededed] px-3 w-72 text-sm'
 								type='text'
-								placeholder='search'
+								placeholder='Search for anime, manga...'
 								value={query}
 								onChange={(e) => handleAnimeSearch(e)}
 							/>
-							<button onClick={handleAnimeSearch}>TEST</button>
 							{searchResults.length > 0 && (
-								<ul>
+								<ul className='absolute bg-[#171717] outline-none border-2 py-2 rounded-md border-purple-500  text-[#ededed] px-3 w-72 text-sm'>
 									{searchResults.map((result) => (
 										<li
 											key={result._id}
-											className='cursor-pointer'
+											className='cursor-pointer rounded hover:bg-purple-500'
 											onClick={() => {
 												navigate(`/anime/${result._id}`);
 												setQuery("");
@@ -84,11 +83,16 @@ const NavBar = () => {
 								</ul>
 							)}
 						</div>
-						{/* test */}
+						{/* Add Anime Button */}
 						{currentUser?.role === "admin" && (
 							<div>
-								<button onClick={() => navigate("/add/anime")}>
-									<span>Add Anime</span>
+								<button
+									className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'
+									onClick={() => navigate("/add/anime")}
+								>
+									<span className='relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0'>
+										Add Anime
+									</span>
 								</button>
 							</div>
 						)}
