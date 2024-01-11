@@ -52,15 +52,16 @@ export const test = async (req, res, next) => {
 export const addTrackedAnime = async (req, res, next) => {
 	try {
 		const { userId, animeId, status, timeUpdated } = req.body;
+
 		const updateObj = {
-			[`trackedAnime.${animeId}`]: {
-				animeId,
-				status,
-				timeUpdated,
+			$set: {
+				[`trackedAnime.${animeId}.animeId`]: animeId,
+				[`trackedAnime.${animeId}.status`]: status,
+				[`trackedAnime.${animeId}.timeUpdated`]: timeUpdated,
 			},
 		};
 
-		await User.findByIdAndUpdate(userId, { $set: updateObj }, { new: true });
+		await User.findByIdAndUpdate(userId, updateObj, { new: true });
 
 		const updatedUser = await User.findById(userId);
 

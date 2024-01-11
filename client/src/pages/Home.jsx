@@ -38,10 +38,9 @@ const Home = () => {
 		fetchAnime();
 	}, [dispatch]);
 
-	// Move to helper file likely
 	const getSeason = () => {
 		const currentDate = new Date();
-		const currentMonth = currentDate.getMonth() + 1; // Months are zero-indexed
+		const currentMonth = currentDate.getMonth() + 1;
 
 		if (currentMonth >= 3 && currentMonth <= 5) {
 			return "Spring";
@@ -55,44 +54,47 @@ const Home = () => {
 	};
 
 	return (
-		// Home Content
-		<div className='bg-[#171717] text-[#ededed] min-h-[calc(100vh-64px)] p-2'>
-			{loading && <p className='text-[#ededed]'>Loading...</p>}
-
+		<div className='bg-gradient-to-br from-purple-800 to-pink-500 text-white min-h-[calc(100vh-64px)] p-4'>
+			{loading && (
+				<div className='flex items-center justify-center h-full'>
+					<div className='animate-spin rounded-full border-t-2 border-b-2 border-[#8A4FFF] h-12 w-12'></div>
+				</div>
+			)}
 			{fetchedAllAnime && (
-				// Seasonal Anime Container
-				<div className=' bg-[#202020] rounded-lg p-1 m-4'>
-					<h2 className='ml-4 text-3xl p-2'>
-						{getSeason()} Anime {new Date().getFullYear()}
-					</h2>
-					{/* Border */}
-					<div className='bg-gradient-to-br from-purple-500 to-pink-500 h-0.5 mx-4'></div>
-					{/* Anime Cards */}
-
-					<div className='flex gap-4 m-4'>
-						{fetchedAllAnime
-							.filter(
-								(anime) =>
-									anime.season === getSeason() &&
-									anime.year === new Date().getFullYear()
-							)
-							.map((anime) => (
-								<Link to={`/anime/${anime._id}`} key={anime._id}>
-									<div
-										className='relative flex flex-col items-center'
-										key={anime._id}
-									>
-										<p className='absolute bottom-0 left-0 bg-black opacity-50 text-white px-2 py-1 z-10 w-full truncate'>
-											{anime.title}
-										</p>
-										<img
-											className='h-80 w-56 rounded-md'
-											src={anime.customImageURL}
-											alt='anime_cover'
-										/>
-									</div>
-								</Link>
-							))}
+				<div className='bg-gray-900 text-white mx-4 mt-6 rounded-lg p-6'>
+					<div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
+						<div className='col-span-2'>
+							<h2 className='text-3xl font-bold mb-6'>
+								{getSeason()} Anime {new Date().getFullYear()}
+							</h2>
+							<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+								{fetchedAllAnime
+									.filter(
+										(anime) =>
+											anime.season === getSeason() &&
+											anime.year === new Date().getFullYear()
+									)
+									.map((anime) => (
+										<Link to={`/anime/${anime._id}`} key={anime._id}>
+											<div className='bg-gray-800 rounded-lg overflow-hidden'>
+												<div className='h-40 relative'>
+													<img
+														src={anime.customImageURL}
+														alt={anime.title}
+														className='absolute top-0 left-0 w-full h-full object-cover'
+													/>
+												</div>
+												<div className='p-4'>
+													<p className='text-lg font-bold mb-2 cursor-pointer'>
+														{anime.title}
+													</p>
+													<p className='text-xs text-gray-400 line-clamp-3'></p>
+												</div>
+											</div>
+										</Link>
+									))}
+							</div>
+						</div>
 					</div>
 				</div>
 			)}

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { FiSettings } from "react-icons/fi";
 
 const NavBar = () => {
 	const { currentUser } = useSelector((state) => state.user);
@@ -10,7 +9,6 @@ const NavBar = () => {
 	const navigate = useNavigate();
 
 	const handleAnimeSearch = async (e) => {
-		// const query = "Ao no Exorcist: Shimane Illuminati-hen";
 		const query = e.target.value;
 		setQuery(query);
 
@@ -18,6 +16,7 @@ const NavBar = () => {
 			setSearchResults([]);
 			return;
 		}
+
 		try {
 			const res = await fetch(
 				`http://localhost:3001/api/anime/anime/search?query=${query}`,
@@ -36,37 +35,23 @@ const NavBar = () => {
 	};
 
 	return (
-		// NavBar Container
-		<div>
-			{/* Content */}
-			<div className='px-8 py-2 bg-[#171717] text-white'>
-				{/* Link Container */}
+		<div className='bg-gray-900 text-white'>
+			<div className='px-8 py-2'>
 				<div className='flex justify-between items-center'>
 					<Link to='/'>
 						<h1 className='text-3xl'>KioTrack</h1>
 					</Link>
 					<div className='flex gap-8 text-xl pt-2'>
-						{!currentUser && (
-							<Link
-								className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'
-								to='/register'
-							>
-								<p className='relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0'>
-									Register
-								</p>
-							</Link>
-						)}
-						{/* Search Bar */}
-						<div className=''>
+						<div className='relative'>
 							<input
-								className='bg-[#171717] outline-none rounded-lg border-2 border-[#444444] h-11 focus:border-purple-500 text-[#ededed] px-3 w-72 text-sm'
+								className='bg-gray-800 outline-none rounded-full border-2 border-gray-700 h-11 focus:border-purple-500 text-white px-4 w-72 text-sm transition-all duration-300 placeholder-gray-500 focus:placeholder-opacity-50'
 								type='text'
 								placeholder='Search for anime, manga...'
 								value={query}
 								onChange={(e) => handleAnimeSearch(e)}
 							/>
 							{searchResults.length > 0 && (
-								<ul className='absolute bg-[#171717] outline-none border-2 py-2 rounded-md border-purple-500  text-[#ededed] px-3 w-72 text-sm'>
+								<ul className='absolute bg-gray-800 outline-none border-2 py-2 rounded-md border-purple-500 text-white px-3 w-72 text-sm'>
 									{searchResults.map((result) => (
 										<li
 											key={result._id}
@@ -83,54 +68,40 @@ const NavBar = () => {
 								</ul>
 							)}
 						</div>
-						{/* Add Anime Button */}
-						{currentUser?.role === "admin" && (
-							<div>
-								<button
-									className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'
-									onClick={() => navigate("/add/anime")}
-								>
-									<span className='relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0'>
-										Add Anime
-									</span>
-								</button>
-							</div>
+						{!currentUser && (
+							<Link
+								className='px-5 py-2.5 rounded-md bg-gray-800 text-white hover:bg-purple-600'
+								to='/register'
+							>
+								Register
+							</Link>
 						)}
-						{/* Signed In User */}
+						{currentUser?.role === "admin" && (
+							<button
+								className='px-5 py-2.5 rounded-md bg-gray-800 text-white hover:bg-purple-600'
+								onClick={() => navigate("/add/anime")}
+							>
+								Add Anime
+							</button>
+						)}
 						{currentUser ? (
-							<div className='flex items-center'>
-								<div className='relative inline-flex items-center justify-center mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'>
-									<Link
-										className='flex items-center'
-										to={`/profile/${currentUser.username}`}
-									>
-										<img
-											src={currentUser.profilePicture}
-											alt='profile_picture'
-											className='h-10 w-10 object-cover'
-										/>
-										<p className='relative px-8'>{currentUser.username}</p>
-									</Link>
-								</div>
-								<Link className='mb-2 ml-2' to={"/settings"}>
-									<FiSettings />
-								</Link>
-							</div>
+							<Link
+								className='px-5 py-2.5 rounded-md bg-gray-800 text-white hover:bg-purple-600'
+								to={`/profile/${currentUser.username}`}
+							>
+								{currentUser.username}
+							</Link>
 						) : (
 							<Link
-								className='relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white'
+								className='px-5 py-2.5 rounded-md bg-gray-800 text-white hover:bg-purple-600'
 								to='/login'
 							>
-								<p className='relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-[#171717] rounded-md group-hover:bg-opacity-0'>
-									Sign In
-								</p>
+								Sign In
 							</Link>
 						)}
 					</div>
 				</div>
 			</div>
-			{/* Border */}
-			<div className='bg-gradient-to-br from-purple-500 to-pink-500 h-0.5 w-[100%] bottom-0'></div>
 		</div>
 	);
 };

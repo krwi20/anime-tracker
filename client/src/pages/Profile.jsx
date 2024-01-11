@@ -75,28 +75,42 @@ const Profile = () => {
 	};
 
 	return (
-		<div className='bg-[#171717] p-2 min-h-[calc(100vh-64px)] '>
-			{loading && <p className='text-[#ededed]'>Loading...</p>}
+		<div className='bg-gradient-to-br from-purple-800 to-pink-500 text-white min-h-[calc(100vh-64px)] p-4'>
+			{loading && (
+				<div className='flex items-center justify-center h-full'>
+					<div className='animate-spin rounded-full border-t-2 border-b-2 border-[#8A4FFF] h-12 w-12'></div>
+				</div>
+			)}
 			{fetchedUser && (
-				<div className='bg-[#202020] text-[#ededed] mx-6 mt-6 rounded-lg'>
-					<div className='flex items-center justify-between py-4 border-2 px-2 border-opacity-80 border-purple-500'>
-						<h1>{fetchedUser.username}'s Profile</h1>
-
-						{currentUser && currentUser.username === fetchedUser.username && (
-							<button>Edit Profile</button>
-						)}
-					</div>
-					<div className='flex'>
-						{/* Left Side */}
-						<div className='flex flex-col py-2 px-2'>
-							{/* Image */}
+				<div className='bg-gray-900 text-white mx-4 mt-6 rounded-lg p-6'>
+					<div className='flex items-center justify-between mb-6'>
+						<div className='flex items-center'>
 							<img
-								className='h-80 w-56'
+								className='h-20 w-20 rounded-full mr-4 object-cover'
 								src={fetchedUser.profilePicture}
 								alt='user_profile_image'
 							/>
-							{/* Small Subsection */}
-							<div className='flex flex-col w-full'>
+							<div>
+								<h1 className='text-3xl font-bold'>{fetchedUser.username}</h1>
+								<p className='text-gray-400'>
+									Member since{" "}
+									{new Date(fetchedUser.createdAt).toLocaleDateString("en-US", {
+										month: "short",
+										day: "numeric",
+										year: "numeric",
+									})}
+								</p>
+							</div>
+						</div>
+						{currentUser && currentUser.username === fetchedUser.username && (
+							<button className='bg-purple-600 rounded-md px-4 py-2 hover:bg-purple-700'>
+								Edit Profile
+							</button>
+						)}
+					</div>
+					<div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
+						<div>
+							<div className='bg-gray-800 rounded-lg p-4 mb-6'>
 								<div className='flex justify-between'>
 									<div className='flex items-center w-full'>
 										<p>Last Online</p>
@@ -124,168 +138,115 @@ const Profile = () => {
 										</p>
 									</div>
 								</div>
-							</div>
-							{/* Button Section */}
-							<div className='flex justify-evenly gap-2 mt-4'>
-								<button className='border-2 flex-grow'>Anime List</button>
-								<button className='border-2 flex-grow'>Manga List</button>
-							</div>
-						</div>
-						{/* Right Side */}
-						<div className='flex flex-1 border-l-2 my-2 border-purple-500 px-2  flex-col'>
-							{/* Description Background */}
-							<div className='flex-grow p-2'>
-								<p>No biography yet.</p>
-							</div>
-							{/* Border */}
-							<div className='bg-gradient-to-br from-purple-500 to-pink-500 h-0.5'></div>
-							{/* Anime Stats and Recent Anime Updates */}
-							<div className='flex'>
-								{/* Anime Stats */}
-								<div className='flex-col p-2 w-1/2'>
-									<h1>Anime Stats</h1>
-									{/* Border */}
-									<div className='bg-gradient-to-br from-purple-500 to-pink-500 h-0.5 mb-4'></div>
-									{/* Progress Bar */}
+								<div className='bg-gray-800 rounded-lg p-4 mb-6 space-y-6'>
+									<hr className='border-t border-gray-600 mb-4' />
+									<h1 className='text-2xl font-bold mb-4'>Anime Stats</h1>
 									<div className='relative pt-1'>
-										<div className='overflow-hidden h-4 mb-4 text-xs flex  bg-emerald-200'>
-											<div
-												style={{
-													width: `${
-														(Object.values(
-															fetchedUser.trackedAnime || {}
-														).filter((anime) => anime.status === "Completed")
-															.length /
-															Object.values(fetchedUser.trackedAnime || {})
-																.length) *
-														100
-													}%`,
-												}}
-												className='shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-purple-500'
-											></div>
-											<div
-												style={{
-													width: `${
-														(Object.values(
-															fetchedUser.trackedAnime || {}
-														).filter((anime) => anime.status === "Watching")
-															.length /
-															Object.values(fetchedUser.trackedAnime || {})
-																.length) *
-														100
-													}%`,
-												}}
-												className='shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500'
-											></div>
-											<div
-												style={{
-													width: `${
-														(Object.values(
-															fetchedUser.trackedAnime || {}
-														).filter((anime) => anime.status === "Dropped")
-															.length /
-															Object.values(fetchedUser.trackedAnime || {})
-																.length) *
-														100
-													}%`,
-												}}
-												className='shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500'
-											></div>
-											<div
-												style={{
-													width: `${
-														(Object.values(
-															fetchedUser.trackedAnime || {}
-														).filter((anime) => anime.status === "On Hold")
-															.length /
-															Object.values(fetchedUser.trackedAnime || {})
-																.length) *
-														100
-													}%`,
-												}}
-												className='shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-yellow-500'
-											></div>
+										<div className='overflow-hidden h-4 mb-2 text-xs flex bg-emerald-200'>
+											{["Watching", "Completed", "On Hold", "Dropped"].map(
+												(status, index) => (
+													<div
+														key={index}
+														style={{
+															width: `${
+																(Object.values(
+																	fetchedUser.trackedAnime || {}
+																).filter((anime) => anime.status === status)
+																	.length /
+																	Object.values(fetchedUser.trackedAnime || {})
+																		.length) *
+																100
+															}%`,
+														}}
+														className={`shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center ${
+															status === "Watching"
+																? "bg-green-500"
+																: status === "Completed"
+																? "bg-purple-500"
+																: status === "On Hold"
+																? "bg-yellow-500"
+																: status === "Dropped"
+																? "bg-red-500"
+																: ""
+														}`}
+													></div>
+												)
+											)}
+										</div>
+										<div className='flex justify-center text-xs mb-4 space-x-4'>
+											{["Watching", "Completed", "On Hold", "Dropped"].map(
+												(status, index) => (
+													<div
+														key={index}
+														className={`flex items-center ${
+															status === "Watching"
+																? "text-green-500"
+																: status === "Completed"
+																? "text-purple-500"
+																: status === "On Hold"
+																? "text-yellow-500"
+																: status === "Dropped"
+																? "text-red-500"
+																: ""
+														}`}
+													>
+														<div
+															className={`bg-${
+																status === "Watching"
+																	? "green-600"
+																	: status === "Completed"
+																	? "purple-600"
+																	: status === "On Hold"
+																	? "yellow-600"
+																	: status === "Dropped"
+																	? "red-600"
+																	: ""
+															} h-3 w-3 rounded-full mr-2`}
+														></div>
+														<p>{status}</p>
+													</div>
+												)
+											)}
 										</div>
 									</div>
-									{/*  */}
-									<div className='flex justify-between'>
+									<div className='flex justify-between text-sm'>
 										<div className='flex flex-col'>
-											{/* P Container */}
-											<div className='flex items-center mb-2 text-xs'>
-												{/* Circle Indicator */}
-												<div className='bg-green-600 h-4 w-4 rounded-full mr-2'></div>
-												<p>
-													Watching{" "}
-													{fetchedUser.trackedAnime
-														? Object.values(fetchedUser.trackedAnime).filter(
-																(anime) => anime.status === "Watching"
-														  ).length
-														: 0}
-												</p>
-											</div>
-											{/* P Container */}
-											<div className='flex items-center mb-2 text-xs'>
-												{/* Circle Indicator */}
-												<div className='bg-purple-600 h-4 w-4 rounded-full mr-2'></div>
-												<p>
-													Completed{" "}
-													{fetchedUser.trackedAnime
-														? Object.values(fetchedUser.trackedAnime).filter(
-																(anime) => anime.status === "Completed"
-														  ).length
-														: 0}
-												</p>
-											</div>
-											{/* P Container */}
-											<div className='flex items-center mb-2 text-xs'>
-												{/* Circle Indicator */}
-												<div className='bg-yellow-600 h-4 w-4 rounded-full mr-2'></div>
-												<p>
-													On Hold{" "}
-													{fetchedUser.trackedAnime
-														? Object.values(fetchedUser.trackedAnime).filter(
-																(anime) => anime.status === "On Hold"
-														  ).length
-														: 0}
-												</p>
-											</div>
-											{/* P Container */}
-											<div className='flex items-center mb-2 text-xs'>
-												{/* Circle Indicator */}
-												<div className='bg-red-600 h-4 w-4 rounded-full mr-2'></div>
-												<p>
-													Dropped{" "}
-													{fetchedUser.trackedAnime
-														? Object.values(fetchedUser.trackedAnime).filter(
-																(anime) => anime.status === "Dropped"
-														  ).length
-														: 0}
-												</p>
-											</div>
-										</div>
-										<div className='text-xs'>
 											<p>
-												Total Entries{" "}
+												Total Entries:{" "}
 												{Object.values(fetchedUser?.trackedAnime || {}).length}
 											</p>
-											<p>Rewatched 0</p>
-											<p>
-												Episodes{" "}
-												{Object.values(fetchedUser?.trackedAnime || {}).reduce(
-													(total, anime) =>
-														total + (anime.episodesWatched || 0),
-													0
-												)}
-											</p>
+											<p>Rewatched: 0</p>
 										</div>
+										<p>
+											Episodes:{" "}
+											{Object.values(fetchedUser?.trackedAnime || {}).reduce(
+												(total, anime) => total + (anime.episodesWatched || 0),
+												0
+											)}
+										</p>
 									</div>
 								</div>
-
-								{/* Recent Anime Updates */}
-								<div className='flex-col p-2 w-1/2'>
-									<h1>Recent Anime</h1>
-									{/* Border */}
-									<div className='bg-gradient-to-br from-purple-500 to-pink-500 h-0.5 mb-4'></div>
+							</div>
+							<div className='flex space-x-4 mb-6'>
+								<button className='bg-gray-800 rounded-md flex-grow px-4 py-2 hover:bg-purple-600'>
+									Anime List
+								</button>
+								<button className='bg-gray-800 rounded-md flex-grow px-4 py-2 hover:bg-purple-600'>
+									Manga List
+								</button>
+							</div>
+						</div>
+						<div className='col-span-2'>
+							<div className='bg-gray-800 rounded-lg p-4 mb-6'>
+								<p className='text-sm'>
+									{fetchedUser.biography || "No biography yet."}
+								</p>
+							</div>
+							<div>
+								<h2 className='text-2xl font-bold mb-4'>
+									Recent Anime Updates
+								</h2>
+								<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
 									{singleTest.map((anime, index) => (
 										<ul key={index} className='mb-4'>
 											<div className='flex items-stretch'>
@@ -303,7 +264,6 @@ const Profile = () => {
 														>
 															{anime?.title}
 														</p>
-														{/* Progress Bar */}
 														<div className='flex gap-4 items-center'>
 															{fetchedUser?.trackedAnime[anime?._id]?.status ===
 															"Watching" ? (
@@ -373,26 +333,82 @@ const Profile = () => {
 																).toLocaleTimeString()}
 															</p>
 														</div>
-														{/* Watching + Rating */}
 														<p>
-															{fetchedUser?.trackedAnime[anime?._id]?.status}
-															{" - "}
+															{fetchedUser?.trackedAnime[anime?._id]?.status} -{" "}
 															<span className='font-bold'>
 																{
 																	fetchedUser?.trackedAnime[anime?._id]
 																		?.episodesWatched
 																}
 															</span>
-															{"/"}
-															{anime?.episodes}
-															{"  ·  "}
-															Rating{" "}
+															/{anime?.episodes} · Rating{" "}
 															{fetchedUser?.trackedAnime[anime?._id]?.rating}
 														</p>
 													</div>
 												</div>
 											</div>
 										</ul>
+									))}
+								</div>
+							</div>
+							<div className='mb-4'>
+								<h2 className='text-2xl font-bold mb-4'>Favourite Anime</h2>
+								<div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
+									{[...Array(4)].map((_, index) => (
+										<div
+											key={index}
+											className='bg-gray-800 rounded-lg overflow-hidden'
+										>
+											<div className='h-40 relative'>
+												<img
+													src='https://cdn.myanimelist.net/images/anime/1337/99013.jpg'
+													alt='Favorite Anime Placeholder'
+													className='absolute top-0 left-0 w-full h-full object-cover'
+												/>
+											</div>
+											<div className='p-4'>
+												<p className='text-lg font-bold mb-2 cursor-pointer'>
+													Favorite Anime Title
+												</p>
+												<p className='text-sm mb-1'>Rating: 8.5</p>
+												<p className='text-xs text-gray-400 line-clamp-3'>
+													Lorem ipsum dolor sit amet, consectetur adipiscing
+													elit. Sed do eiusmod tempor incididunt ut labore et
+													dolore magna aliqua.
+												</p>
+											</div>
+										</div>
+									))}
+								</div>
+							</div>
+							<div>
+								<h2 className='text-2xl font-bold mb-4'>
+									Favourite Characters
+								</h2>
+								<div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
+									{[...Array(4)].map((_, index) => (
+										<div
+											key={index}
+											className='bg-gray-800 rounded-lg overflow-hidden'
+										>
+											<div className='h-40 relative'>
+												<img
+													src='https://cdn.myanimelist.net/images/anime/1337/99013.jpg'
+													alt='Favorite Anime Placeholder'
+													className='absolute top-0 left-0 w-full h-full object-cover'
+												/>
+											</div>
+											<div className='p-4'>
+												<p className='text-lg font-bold mb-2 cursor-pointer'>
+													Favorite Character Name
+												</p>
+												<p className='text-xs text-gray-400 line-clamp-3'>
+													Lorem ipsum dolor sit amet, consectetur adipiscing
+													elit. Sed do eiusmod tempor incididunt ut labore et
+													dolore magna aliqua.
+												</p>
+											</div>
+										</div>
 									))}
 								</div>
 							</div>
