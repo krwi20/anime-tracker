@@ -272,237 +272,242 @@ const Anime = () => {
 	return (
 		<div className='bg-gradient-to-br from-gray-800 to-gray-700 text-white min-h-[calc(100vh-64px)] p-4'>
 			{/* Loading spinner while being fetched */}
-			{loading && (
+			{loading ? (
 				<div className='flex items-center justify-center h-full'>
 					<div className='animate-spin rounded-full border-t-2 border-b-2 border-[#8A4FFF] h-12 w-12'></div>
 				</div>
-			)}
-			{/* Display the specific anime's information if there is any */}
-			{fetchedSpecificAnime && (
-				<div className='bg-gray-900 rounded-lg p-4 m-4'>
-					<div className='grid grid-cols-1 lg:grid-cols-3 gap-4'>
-						{/* Left column - anime details */}
-						<div className='lg:col-span-2'>
-							<div className='flex flex-col'>
-								<h1 className='text-4xl font-bold mb-2'>
-									{fetchedSpecificAnime.title}
-								</h1>
-								<p className='text-lg mb-4'>{fetchedSpecificAnime.title_jp}</p>
-								<div className='mb-4'>
-									<img
-										src={fetchedSpecificAnime.customImageURL}
-										alt={fetchedSpecificAnime.title}
-										className='w-full h-full object-cover rounded-md'
-										style={{ width: "225px", height: "318px" }}
-									/>
+			) : (
+				<div>
+					{/* Display the specific anime's information if there is any */}
+					{fetchedSpecificAnime && (
+						<div className='bg-gray-900 rounded-lg p-4 m-4'>
+							<div className='grid grid-cols-1 lg:grid-cols-3 gap-4'>
+								{/* Left column - anime details */}
+								<div className='lg:col-span-2'>
+									<div className='flex flex-col'>
+										<h1 className='text-4xl font-bold mb-2'>
+											{fetchedSpecificAnime.title}
+										</h1>
+										<p className='text-lg mb-4'>
+											{fetchedSpecificAnime.title_jp}
+										</p>
+										<div className='mb-4'>
+											<img
+												src={fetchedSpecificAnime.customImageURL}
+												alt={fetchedSpecificAnime.title}
+												className='w-full h-full object-cover rounded-md'
+												style={{ width: "225px", height: "318px" }}
+											/>
+										</div>
+										<span className='text-lg font-bold'>Description:</span>
+										<p>{fetchedSpecificAnime.description}</p>
+									</div>
 								</div>
-								<span className='text-lg font-bold'>Description:</span>
-								<p>{fetchedSpecificAnime.description}</p>
-							</div>
-						</div>
-						{/* Center column - anime details */}
-						<div className='lg:col-span-1 space-y-4'>
-							<div className='flex flex-col'>
-								<span className='text-lg font-bold'>Details:</span>
-								<div className='flex flex-col mt-2 space-y-2'>
-									{/* Anime Details */}
-									<span>
-										<span className='font-bold'>Type:</span>{" "}
-										{fetchedSpecificAnime.type}
-									</span>
-									<span>
-										<span className='font-bold'>Episodes:</span>{" "}
-										{fetchedSpecificAnime.episodes}
-									</span>
-									<span>
-										<span className='font-bold'>Status:</span>{" "}
-										{fetchedSpecificAnime.status}
-									</span>
-									<span>
-										<span className='font-bold'>Aired:</span>{" "}
-										{`${formatDate(
-											fetchedSpecificAnime.airedFrom
-										)} to ${formatDate(fetchedSpecificAnime.airedTo)}`}
-									</span>
-									<span>
-										<span className='font-bold'>Premiered:</span>{" "}
-										{fetchedSpecificAnime.premiered}
-									</span>
-									<span>
-										<span className='font-bold'>Producers:</span>{" "}
-										{fetchedSpecificAnime?.producers.join(", ")}
-									</span>
-									<span>
-										<span className='font-bold'>Licensors:</span>{" "}
-										{fetchedSpecificAnime.licensors.join(", ")}
-									</span>
-									<span>
-										<span className='font-bold'>Studios:</span>{" "}
-										{fetchedSpecificAnime.studios.join(", ")}
-									</span>
-									<span>
-										<span className='font-bold'>Source:</span>{" "}
-										{fetchedSpecificAnime.source}
-									</span>
-									<span>
-										<span className='font-bold'>Genres:</span>{" "}
-										{fetchedSpecificAnime.genres.join(", ")}
-									</span>
-									<span>
-										<span className='font-bold'>Duration:</span>{" "}
-										{fetchedSpecificAnime.duration}
-									</span>
-									<span>
-										<span className='font-bold'>Rating:</span>{" "}
-										{fetchedSpecificAnime.rating}
-									</span>
+								{/* Center column - anime details */}
+								<div className='lg:col-span-1 space-y-4'>
+									<div className='flex flex-col'>
+										<span className='text-lg font-bold'>Details:</span>
+										<div className='flex flex-col mt-2 space-y-2'>
+											{/* Anime Details */}
+											<span>
+												<span className='font-bold'>Type:</span>{" "}
+												{fetchedSpecificAnime.type}
+											</span>
+											<span>
+												<span className='font-bold'>Episodes:</span>{" "}
+												{fetchedSpecificAnime.episodes}
+											</span>
+											<span>
+												<span className='font-bold'>Status:</span>{" "}
+												{fetchedSpecificAnime.status}
+											</span>
+											<span>
+												<span className='font-bold'>Aired:</span>{" "}
+												{`${formatDate(
+													fetchedSpecificAnime.airedFrom
+												)} to ${formatDate(fetchedSpecificAnime.airedTo)}`}
+											</span>
+											<span>
+												<span className='font-bold'>Premiered:</span>{" "}
+												{fetchedSpecificAnime.premiered}
+											</span>
+											<span>
+												<span className='font-bold'>Producers:</span>{" "}
+												{fetchedSpecificAnime?.producers.join(", ")}
+											</span>
+											<span>
+												<span className='font-bold'>Licensors:</span>{" "}
+												{fetchedSpecificAnime.licensors.join(", ")}
+											</span>
+											<span>
+												<span className='font-bold'>Studios:</span>{" "}
+												{fetchedSpecificAnime.studios.join(", ")}
+											</span>
+											<span>
+												<span className='font-bold'>Source:</span>{" "}
+												{fetchedSpecificAnime.source}
+											</span>
+											<span>
+												<span className='font-bold'>Genres:</span>{" "}
+												{fetchedSpecificAnime.genres.join(", ")}
+											</span>
+											<span>
+												<span className='font-bold'>Duration:</span>{" "}
+												{fetchedSpecificAnime.duration}
+											</span>
+											<span>
+												<span className='font-bold'>Rating:</span>{" "}
+												{fetchedSpecificAnime.rating}
+											</span>
+										</div>
+									</div>
 								</div>
-							</div>
-						</div>
-						{/* Right column - user actions */}
-						<div className='lg:col-span-3 space-y-4'>
-							<div className='border-b-2 border-gray-700'></div>
-							{/* User status actions */}
-							<div className='flex flex-col'>
-								<span className='text-lg font-bold'>Your Status:</span>
-								<div className='flex mt-2 space-x-4'>
-									<button onClick={() => trackAnime("Watching")}>
-										<span
-											className={`px-5 py-2.5 transition-all ease-in duration-75 bg-gray-800 rounded-md hover:bg-purple-600 
+								{/* Right column - user actions */}
+								<div className='lg:col-span-3 space-y-4'>
+									<div className='border-b-2 border-gray-700'></div>
+									{/* User status actions */}
+									<div className='flex flex-col'>
+										<span className='text-lg font-bold'>Your Status:</span>
+										<div className='flex mt-2 space-x-4'>
+											<button onClick={() => trackAnime("Watching")}>
+												<span
+													className={`px-5 py-2.5 transition-all ease-in duration-75 bg-gray-800 rounded-md hover:bg-purple-600 
 							${
 								currentUser?.trackedAnime?.[id]?.status === "Watching"
 									? "bg-purple-600"
 									: ""
 							}`}
-										>
-											Watching
-										</span>
-									</button>
-									<button onClick={() => trackAnime("Completed")}>
-										<span
-											className={`px-5 py-2.5 transition-all ease-in duration-75 bg-gray-800 rounded-md hover:bg-purple-600 
+												>
+													Watching
+												</span>
+											</button>
+											<button onClick={() => trackAnime("Completed")}>
+												<span
+													className={`px-5 py-2.5 transition-all ease-in duration-75 bg-gray-800 rounded-md hover:bg-purple-600 
 							${
 								currentUser?.trackedAnime?.[id]?.status === "Completed"
 									? "bg-purple-600"
 									: ""
 							}`}
-										>
-											Completed
-										</span>
-									</button>
-									<button onClick={() => trackAnime("Plan to watch")}>
-										<span
-											className={`px-5 py-2.5 transition-all ease-in duration-75 bg-gray-800 rounded-md hover:bg-purple-600 
+												>
+													Completed
+												</span>
+											</button>
+											<button onClick={() => trackAnime("Plan to watch")}>
+												<span
+													className={`px-5 py-2.5 transition-all ease-in duration-75 bg-gray-800 rounded-md hover:bg-purple-600 
 							${
 								currentUser?.trackedAnime?.[id]?.status === "Plan to watch"
 									? "bg-purple-600"
 									: ""
 							}`}
-										>
-											Plan to watch
-										</span>
-									</button>
-									<button onClick={() => trackAnime("On Hold")}>
-										<span
-											className={`px-5 py-2.5 transition-all ease-in duration-75 bg-gray-800 rounded-md hover:bg-purple-600 
+												>
+													Plan to watch
+												</span>
+											</button>
+											<button onClick={() => trackAnime("On Hold")}>
+												<span
+													className={`px-5 py-2.5 transition-all ease-in duration-75 bg-gray-800 rounded-md hover:bg-purple-600 
 							${
 								currentUser?.trackedAnime?.[id]?.status === "On Hold"
 									? "bg-purple-600"
 									: ""
 							}`}
-										>
-											On Hold
-										</span>
-									</button>
-									<button onClick={() => trackAnime("Dropped")}>
-										<span
-											className={`px-5 py-2.5 transition-all ease-in duration-75 bg-gray-800 rounded-md hover:bg-purple-600 
+												>
+													On Hold
+												</span>
+											</button>
+											<button onClick={() => trackAnime("Dropped")}>
+												<span
+													className={`px-5 py-2.5 transition-all ease-in duration-75 bg-gray-800 rounded-md hover:bg-purple-600 
 							${
 								currentUser?.trackedAnime?.[id]?.status === "Dropped"
 									? "bg-purple-600"
 									: ""
 							}`}
-										>
-											Dropped
-										</span>
-									</button>
-								</div>
-							</div>
-							{/* User rating section */}
-							<div className='flex flex-col'>
-								<span className='text-lg font-bold'>Your Rating:</span>
-								<div className='flex mt-2 space-x-4'>
-									{/* Rating options */}
-									{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-										<button
-											key={num}
-											onClick={() => updateAnimeRating(num)}
-											className={`px-5 py-2.5 transition-all ease-in duration-75 bg-gray-800 rounded-md hover:bg-purple-600${
-												currentUser?.trackedAnime?.[id]?.rating === num
-													? " bg-purple-600 py-2 px-4 rounded-md cursor-pointer"
-													: ""
-											}`}
-										>
-											{num}
-										</button>
-									))}
-								</div>
-							</div>
-							{/* Episodes watched section */}
-							<div className='flex flex-col'>
-								<span className='text-lg font-bold'>Episodes Watched:</span>
-								<div className='flex mt-2 space-x-4'>
-									{/* Increase episodes watched by one */}
-									<button
-										onClick={() => updateEpisodesWatchedByOne()}
-										className='px-5 py-2.5 transition-all ease-in duration-75 bg-gray-800 rounded-md hover:bg-purple-600'
-									>
-										+1
-									</button>
-									{/* Set episodes watched to input value */}
-									<input
-										type='number'
-										min='0'
-										max={fetchedSpecificAnime.episodes}
-										placeholder={
-											currentUser?.trackedAnime?.[id]?.episodesWatched
-										}
-										onChange={(e) => setEpisodesWatched(e.target.value)}
-										className='w-16 p-2 rounded-md bg-gray-800'
-									/>
-									<button
-										onClick={() => updateEpisodesWatched()}
-										className='px-5 py-2.5 transition-all ease-in duration-75 bg-gray-800 rounded-md hover:bg-purple-600'
-									>
-										Update
-									</button>
-								</div>
-							</div>
-							{/* User actions section */}
-							<div className='flex flex-col'>
-								<span className='text-lg font-bold'>Actions:</span>
-								<div className='flex mt-2 space-x-4'>
-									{/* Remove anime from tracked list */}
-									<button
-										onClick={() => removeAnime()}
-										className='px-5 py-2.5 transition-all ease-in duration-75 bg-gray-800 rounded-md hover:bg-red-500'
-									>
-										Remove from List
-									</button>
-									{/* If the user is an admin render this section */}
-									{currentUser?.role === "admin" && (
-										// Allows admins to edit the specific anime
-										<button
-											onClick={() => navigate(`/edit/anime/${id}`)}
-											className='px-5 py-2.5 transition-all ease-in duration-75 bg-gray-800 rounded-md hover:bg-green-500'
-										>
-											Edit Anime
-										</button>
-									)}
+												>
+													Dropped
+												</span>
+											</button>
+										</div>
+									</div>
+									{/* User rating section */}
+									<div className='flex flex-col'>
+										<span className='text-lg font-bold'>Your Rating:</span>
+										<div className='flex mt-2 space-x-4'>
+											{/* Rating options */}
+											{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
+												<button
+													key={num}
+													onClick={() => updateAnimeRating(num)}
+													className={`px-5 py-2.5 transition-all ease-in duration-75 bg-gray-800 rounded-md hover:bg-purple-600${
+														currentUser?.trackedAnime?.[id]?.rating === num
+															? " bg-purple-600 py-2 px-4 rounded-md cursor-pointer"
+															: ""
+													}`}
+												>
+													{num}
+												</button>
+											))}
+										</div>
+									</div>
+									{/* Episodes watched section */}
+									<div className='flex flex-col'>
+										<span className='text-lg font-bold'>Episodes Watched:</span>
+										<div className='flex mt-2 space-x-4'>
+											{/* Increase episodes watched by one */}
+											<button
+												onClick={() => updateEpisodesWatchedByOne()}
+												className='px-5 py-2.5 transition-all ease-in duration-75 bg-gray-800 rounded-md hover:bg-purple-600'
+											>
+												+1
+											</button>
+											{/* Set episodes watched to input value */}
+											<input
+												type='number'
+												min='0'
+												max={fetchedSpecificAnime.episodes}
+												placeholder={
+													currentUser?.trackedAnime?.[id]?.episodesWatched
+												}
+												onChange={(e) => setEpisodesWatched(e.target.value)}
+												className='w-16 p-2 rounded-md bg-gray-800'
+											/>
+											<button
+												onClick={() => updateEpisodesWatched()}
+												className='px-5 py-2.5 transition-all ease-in duration-75 bg-gray-800 rounded-md hover:bg-purple-600'
+											>
+												Update
+											</button>
+										</div>
+									</div>
+									{/* User actions section */}
+									<div className='flex flex-col'>
+										<span className='text-lg font-bold'>Actions:</span>
+										<div className='flex mt-2 space-x-4'>
+											{/* Remove anime from tracked list */}
+											<button
+												onClick={() => removeAnime()}
+												className='px-5 py-2.5 transition-all ease-in duration-75 bg-gray-800 rounded-md hover:bg-red-500'
+											>
+												Remove from List
+											</button>
+											{/* If the user is an admin render this section */}
+											{currentUser?.role === "admin" && (
+												// Allows admins to edit the specific anime
+												<button
+													onClick={() => navigate(`/edit/anime/${id}`)}
+													className='px-5 py-2.5 transition-all ease-in duration-75 bg-gray-800 rounded-md hover:bg-green-500'
+												>
+													Edit Anime
+												</button>
+											)}
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
+					)}
 				</div>
 			)}
 		</div>
