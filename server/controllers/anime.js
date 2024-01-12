@@ -22,10 +22,29 @@ export const updateSpecificAnime = async (req, res, next) => {
 	try {
 		const updateSpecificAnime = await Anime.findById(req.params.id);
 
+		console.log(req.body);
+
 		updateSpecificAnime.title = req.body.title;
 		updateSpecificAnime.title_jp = req.body.title_jp;
 		updateSpecificAnime.description = req.body.description;
 		updateSpecificAnime.customImageURL = req.body.image;
+		updateSpecificAnime.type = req.body.type;
+		updateSpecificAnime.source = req.body.source;
+		updateSpecificAnime.episodes = req.body.episodes;
+		updateSpecificAnime.status = req.body.status;
+		updateSpecificAnime.airing = req.body.airing;
+		updateSpecificAnime.airedFrom = req.body.airedFrom;
+		updateSpecificAnime.airedUntil = req.body.airedUntil;
+		updateSpecificAnime.duration = req.body.duration;
+		updateSpecificAnime.rating = req.body.rating;
+		updateSpecificAnime.background = req.body.background;
+		updateSpecificAnime.season = req.body.season;
+		updateSpecificAnime.year = req.body.year;
+		updateSpecificAnime.producers = req.body.producers;
+		updateSpecificAnime.broadcast = req.body.broadcast;
+		updateSpecificAnime.licensors = req.body.licensors;
+		updateSpecificAnime.studios = req.body.studios;
+		updateSpecificAnime.genres = req.body.genres;
 
 		const updatedAnime = await updateSpecificAnime.save();
 

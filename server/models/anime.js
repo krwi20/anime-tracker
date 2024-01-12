@@ -18,6 +18,9 @@ const animeSchema = new mongoose.Schema({
 	type: {
 		type: String,
 	},
+	source: {
+		type: String,
+	},
 	episodes: {
 		type: Number,
 	},
@@ -36,7 +39,7 @@ const animeSchema = new mongoose.Schema({
 	duration: {
 		type: String,
 	},
-	ageRating: {
+	rating: {
 		type: String,
 	},
 	background: {

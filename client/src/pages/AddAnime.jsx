@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AddAnime = () => {
-	// Anime data from the form
+	const navigate = useNavigate();
 	const [formData, setFormData] = useState({
 		title: "",
 		title_jp: "",
@@ -27,7 +28,6 @@ const AddAnime = () => {
 		genres: [],
 	});
 
-	// Form input handling
 	const handleChange = (e) => {
 		const { id, type, value, checked } = e.target;
 
@@ -94,7 +94,6 @@ const AddAnime = () => {
 		}));
 	};
 
-	// Form submission handling
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
@@ -109,248 +108,219 @@ const AddAnime = () => {
 					body: JSON.stringify(formData),
 				}
 			);
-			console.log(response);
+			const data = await response.json();
+			if (data.success === false) {
+				console.log("err");
+			}
+			navigate("/");
 		} catch (error) {
 			console.log(error);
 		}
 	};
 
 	return (
-		<div className='bg-[#171717] min-h-[calc(100vh-64px)] p-2 text-white'>
-			<div className='bg-[#202020] rounded-lg'>
-				<form className='flex flex-col' onSubmit={handleSubmit}>
-					{/* Title Section */}
-					<label className='flex flex-col'>
-						Title:{" "}
-						<input
-							className='bg-[#202020] outline-none rounded-lg border-2 border-[#444444] h-8 focus:border-[#da0037] text-[#ededed] px-3'
-							type='text'
-							placeholder='Title'
-							id='title'
-							onChange={handleChange}
-						/>
-					</label>
-					{/* Japanese Title Section */}
-					<label className='flex flex-col'>
-						Japanese Title:{" "}
-						<input
-							className='bg-[#202020] outline-none rounded-lg border-2 border-[#444444] h-8 focus:border-[#da0037] text-[#ededed] px-3'
-							type='text'
-							placeholder='Japanese Title'
-							id='title_jp'
-							onChange={handleChange}
-						/>
-					</label>
-					{/* Description Section */}
-
-					<label className='flex flex-col'>
-						Description:{" "}
-						<textarea
-							className='bg-[#202020] outline-none rounded-lg border-2 border-[#444444] h-8 focus:border-[#da0037] text-[#ededed] px-3'
-							type='text'
-							placeholder='Description'
-							id='description'
-							onChange={handleChange}
-						/>
-					</label>
-
-					{/* Image Section */}
-					<label className='flex flex-col'>
-						Image:{" "}
-						<input
-							className='bg-[#202020] outline-none rounded-lg border-2 border-[#444444] h-8 focus:border-[#da0037] text-[#ededed] px-3'
-							type='text'
-							placeholder='Image'
-							id='customImageURL'
-							onChange={handleChange}
-						/>
-					</label>
-					{/* Type Section */}
-					<label className='flex flex-col'>
-						Type:{" "}
-						<input
-							className='bg-[#202020] outline-none rounded-lg border-2 border-[#444444] h-8 focus:border-[#da0037] text-[#ededed] px-3'
-							type='text'
-							placeholder='Type'
-							id='type'
-							onChange={handleChange}
-						/>
-					</label>
-					{/* Source Section */}
-					<label className='flex flex-col'>
-						Source:{" "}
-						<input
-							className='bg-[#202020] outline-none rounded-lg border-2 border-[#444444] h-8 focus:border-[#da0037] text-[#ededed] px-3'
-							type='text'
-							placeholder='Source'
-							id='source'
-							onChange={handleChange}
-						/>
-					</label>
-					{/* Episodes Section */}
-					<label className='flex flex-col'>
-						Episodes:{" "}
-						<input
-							className='bg-[#202020] outline-none rounded-lg border-2 border-[#444444] h-8 focus:border-[#da0037] text-[#ededed] px-3'
-							type='number'
-							placeholder='Episodes'
-							id='episodes'
-							onChange={handleChange}
-						/>
-					</label>
-					{/* Status Section */}
-					<label className='flex flex-col'>
-						Status:{" "}
-						<input
-							className='bg-[#202020] outline-none rounded-lg border-2 border-[#444444] h-8 focus:border-[#da0037] text-[#ededed] px-3'
-							type='text'
-							placeholder='Status'
-							id='status'
-							onChange={handleChange}
-						/>
-					</label>
-					{/* Airing Section */}
-					<label className='flex flex-col'>
-						Airing:{" "}
-						<input
-							className='bg-[#202020] outline-none rounded-lg border-2 border-[#444444] h-8 focus:border-[#da0037] text-[#ededed] px-3'
-							type='checkbox'
-							id='airing'
-							onChange={handleChange}
-						/>
-					</label>
-					{/* Aired From Section */}
-					<label className='flex flex-col'>
-						Aired From (Start Date):{" "}
-						<input
-							className='bg-[#202020] outline-none rounded-lg border-2 border-[#444444] h-8 focus:border-[#da0037] text-[#ededed] px-3'
-							type='date'
-							id='airedFrom'
-							onChange={handleChange}
-						/>
-					</label>
-					{/* Aired To Section */}
-					<label className='flex flex-col'>
-						Aired To (End Date):{" "}
-						<input
-							className='bg-[#202020] outline-none rounded-lg border-2 border-[#444444] h-8 focus:border-[#da0037] text-[#ededed] px-3'
-							type='date'
-							id='airedUntil'
-							onChange={handleChange}
-						/>
-					</label>
-					{/* Duration Section */}
-					<label className='flex flex-col'>
-						Duration:{" "}
-						<input
-							className='bg-[#202020] outline-none rounded-lg border-2 border-[#444444] h-8 focus:border-[#da0037] text-[#ededed] px-3'
-							type='text'
-							id='duration'
-							placeholder='Duration'
-							onChange={handleChange}
-						/>
-					</label>
-					{/* Rating Section */}
-					<label className='flex flex-col'>
-						Rating:{" "}
-						<input
-							className='bg-[#202020] outline-none rounded-lg border-2 border-[#444444] h-8 focus:border-[#da0037] text-[#ededed] px-3'
-							type='text'
-							id='rating'
-							placeholder='Rating'
-							onChange={handleChange}
-						/>
-					</label>
-					{/* Background Section */}
-					<label className='flex flex-col'>
-						Background:{" "}
-						<input
-							className='bg-[#202020] outline-none rounded-lg border-2 border-[#444444] h-8 focus:border-[#da0037] text-[#ededed] px-3'
-							type='text'
-							id='background'
-							placeholder='Background'
-							onChange={handleChange}
-						/>
-					</label>
-					{/* Season Section */}
-					<label className='flex flex-col'>
-						Season:{" "}
-						<input
-							className='bg-[#202020] outline-none rounded-lg border-2 border-[#444444] h-8 focus:border-[#da0037] text-[#ededed] px-3'
-							type='text'
-							id='season'
-							placeholder='Season'
-							onChange={handleChange}
-						/>
-					</label>
-					{/* Year Section */}
-					<label className='flex flex-col'>
-						Year:{" "}
-						<input
-							className='bg-[#202020] outline-none rounded-lg border-2 border-[#444444] h-8 focus:border-[#da0037] text-[#ededed] px-3'
-							type='text'
-							id='year'
-							placeholder='Year'
-							onChange={handleChange}
-						/>
-					</label>
-					{/* Producers Section */}
-					<label className='flex flex-col'>
-						Producers (comma-separated):{" "}
-						<input
-							className='bg-[#202020] outline-none rounded-lg border-2 border-[#444444] h-8 focus:border-[#da0037] text-[#ededed] px-3'
-							type='text'
-							id='producers'
-							placeholder='Producers'
-							onChange={handleChange}
-						/>
-					</label>
-					{/* Broadcast Section */}
-					<label className='flex flex-col'>
-						Broadcast:{" "}
-						<input
-							className='bg-[#202020] outline-none rounded-lg border-2 border-[#444444] h-8 focus:border-[#da0037] text-[#ededed] px-3'
-							type='text'
-							id='broadcast'
-							placeholder='Broadcast'
-							onChange={handleChange}
-						/>
-					</label>
-					{/* Licensors Section */}
-					<label className='flex flex-col'>
-						Licensors:{" "}
-						<input
-							className='bg-[#202020] outline-none rounded-lg border-2 border-[#444444] h-8 focus:border-[#da0037] text-[#ededed] px-3'
-							type='text'
-							id='licensors'
-							placeholder='Licensors'
-							onChange={handleChange}
-						/>
-					</label>
-					{/* Studios Section */}
-					<label className='flex flex-col'>
-						Studios:{" "}
-						<input
-							className='bg-[#202020] outline-none rounded-lg border-2 border-[#444444] h-8 focus:border-[#da0037] text-[#ededed] px-3'
-							type='text'
-							id='studios'
-							placeholder='Studios'
-							onChange={handleChange}
-						/>
-					</label>
-					{/* Genres Section */}
-					<label className='flex flex-col'>
-						Genres:{" "}
-						<input
-							className='bg-[#202020] outline-none rounded-lg border-2 border-[#444444] h-8 focus:border-[#da0037] text-[#ededed] px-3'
-							type='text'
-							id='genres'
-							placeholder='Genres'
-							onChange={handleChange}
-						/>
-					</label>
-					<button type='submit'>Submit</button>
-				</form>{" "}
+		<div className='bg-gradient-to-br from-purple-800 to-pink-500 text-white min-h-[calc(100vh-64px)] p-4'>
+			<div className='bg-gray-900 mx-auto rounded-lg p-6'>
+				<form className='grid grid-cols-2 gap-6' onSubmit={handleSubmit}>
+					<div className='col-span-1 space-y-4'>
+						<label className='flex flex-col'>
+							Title:
+							<input
+								type='text'
+								id='title'
+								className='rounded-md bg-gray-800 p-2'
+								onChange={handleChange}
+							/>
+						</label>
+						<label className='flex flex-col'>
+							Japanese Title:
+							<input
+								type='text'
+								id='title_jp'
+								className='rounded-md bg-gray-800 p-2'
+								onChange={handleChange}
+							/>
+						</label>
+						<label className='flex flex-col'>
+							Description:
+							<textarea
+								id='description'
+								className='rounded-md bg-gray-800 p-2'
+								onChange={handleChange}
+							/>
+						</label>
+						<label className='flex flex-col'>
+							Image:
+							<input
+								type='text'
+								id='customImageURL'
+								className='rounded-md bg-gray-800 p-2'
+								onChange={handleChange}
+							/>
+						</label>
+						<label className='flex flex-col'>
+							Type:
+							<input
+								type='text'
+								id='type'
+								className='rounded-md bg-gray-800 p-2'
+								onChange={handleChange}
+							/>
+						</label>
+						<label className='flex flex-col'>
+							Source:
+							<input
+								type='text'
+								id='source'
+								className='rounded-md bg-gray-800 p-2'
+								onChange={handleChange}
+							/>
+						</label>
+						<label className='flex flex-col'>
+							Episodes:
+							<input
+								type='number'
+								id='episodes'
+								className='rounded-md bg-gray-800 p-2'
+								onChange={handleChange}
+							/>
+						</label>
+						<label className='flex flex-col'>
+							Status:
+							<input
+								type='text'
+								id='status'
+								className='rounded-md bg-gray-800 p-2'
+								onChange={handleChange}
+							/>
+						</label>
+						<label className='flex flex-col'>
+							Airing:
+							<input
+								type='checkbox'
+								id='airing'
+								className='rounded-md bg-gray-800 p-2'
+								onChange={handleChange}
+							/>
+						</label>
+						<label className='flex flex-col'>
+							Aired From (Start Date):
+							<input
+								type='date'
+								id='airedFrom'
+								className='rounded-md bg-gray-800 p-2'
+								onChange={handleChange}
+							/>
+						</label>
+						<label className='flex flex-col'>
+							Aired To (End Date):
+							<input
+								type='date'
+								id='airedUntil'
+								className='rounded-md bg-gray-800 p-2'
+								onChange={handleChange}
+							/>
+						</label>
+					</div>
+					<div className='col-span-1 space-y-4'>
+						<label className='flex flex-col'>
+							Duration:
+							<input
+								type='text'
+								id='duration'
+								className='rounded-md bg-gray-800 p-2'
+								onChange={handleChange}
+							/>
+						</label>
+						<label className='flex flex-col'>
+							Rating:
+							<input
+								type='text'
+								id='rating'
+								className='rounded-md bg-gray-800 p-2'
+								onChange={handleChange}
+							/>
+						</label>
+						<label className='flex flex-col'>
+							Background:
+							<input
+								type='text'
+								id='background'
+								className='rounded-md bg-gray-800 p-2'
+								onChange={handleChange}
+							/>
+						</label>
+						<label className='flex flex-col'>
+							Season:
+							<input
+								type='text'
+								id='season'
+								className='rounded-md bg-gray-800 p-2'
+								onChange={handleChange}
+							/>
+						</label>
+						<label className='flex flex-col'>
+							Year:
+							<input
+								type='text'
+								id='year'
+								className='rounded-md bg-gray-800 p-2'
+								onChange={handleChange}
+							/>
+						</label>
+						<label className='flex flex-col'>
+							Producers (Comma Seperated):
+							<input
+								type='text'
+								id='producers'
+								className='rounded-md bg-gray-800 p-2'
+								onChange={handleChange}
+							/>
+						</label>
+						<label className='flex flex-col'>
+							Broadcast:
+							<input
+								type='text'
+								id='broadcast'
+								className='rounded-md bg-gray-800 p-2'
+								onChange={handleChange}
+							/>
+						</label>
+						<label className='flex flex-col'>
+							Licensors (Comma Seperated):
+							<input
+								type='text'
+								id='licensors'
+								className='rounded-md bg-gray-800 p-2'
+								onChange={handleChange}
+							/>
+						</label>
+						<label className='flex flex-col'>
+							Studios (Comma Seperated):
+							<input
+								type='text'
+								id='studios'
+								className='rounded-md bg-gray-800 p-2'
+								onChange={handleChange}
+							/>
+						</label>
+						<label className='flex flex-col'>
+							Genres (Comma Seperateed):
+							<input
+								type='text'
+								id='genres'
+								className='rounded-md bg-gray-800 p-2'
+								onChange={handleChange}
+							/>
+						</label>
+					</div>
+					<button
+						type='submit'
+						className='bg-gray-800 rounded-md flex-grow px-4 py-2 hover:bg-purple-600 col-span-2'
+					>
+						Submit
+					</button>
+				</form>
 			</div>
 		</div>
 	);
