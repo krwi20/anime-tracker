@@ -2,17 +2,24 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 
+import { persistor } from "../redux/store";
 import {
 	updateSpecificAnimeStart,
 	updateSpecificAnimeSuccess,
 	updateSpecificAnimeFailure,
 } from "../redux/anime/animeSlice";
+import { signOut } from "../redux/user/userSlice";
 
 const EditAnime = () => {
+	// Extract the id from the url params
 	const { id } = useParams();
+	// Redux state - gets anime information
 	const { fetchedSpecificAnime, loading } = useSelector((state) => state.anime);
+	// Redux dispatch hook
 	const dispatch = useDispatch();
+	// React router hook for navigation
 	const navigate = useNavigate();
+	// State to manage the anime edit updates
 	const [updatedAnimeData, setUpdatedAnimeData] = useState({
 		title: fetchedSpecificAnime.title || "",
 		title_jp: fetchedSpecificAnime.title_jp || "",
@@ -41,15 +48,18 @@ const EditAnime = () => {
 		genres: fetchedSpecificAnime.genres || [],
 	});
 
+	// Function to format the timestamp into more readable data
 	function formatDate(dateString) {
 		return dateString ? new Date(dateString).toISOString().split("T")[0] : "";
 	}
 
-	const test = async () => {
+	// Function to edit the specific anime
+	const editSpecificAnime = async () => {
 		try {
+			// Redux store - dispatch action to start updating specific anime data
 			dispatch(updateSpecificAnimeStart());
-
-			const res = await fetch(
+			// Backend fetch to update the anime with new details
+			const response = await fetch(
 				`http://localhost:3001/api/anime/anime/edit/${id}`,
 				{
 					method: "PATCH",
@@ -59,40 +69,60 @@ const EditAnime = () => {
 					body: JSON.stringify(updatedAnimeData),
 				}
 			);
-			const data = await res.json();
+			// Parse the data from the response
+			const data = await response.json();
+			// If the request is unsuccessful dispatch the failure with the data
 			if (data.success === false) {
 				dispatch(updateSpecificAnimeFailure(data));
-				return;
+				// If the request is unsuccessful, sign the user out, clear the user redux state, redirect to login page
+				dispatch(signOut());
+				persistor.purge(["user"]);
+				navigate("/login");
 			}
+			// // If the request is successful dispatch the success witht the data
 			dispatch(updateSpecificAnimeSuccess(data));
+			// Redirect to the specific anime page
 			navigate(`/anime/${id}`);
 		} catch (error) {
+			// If the request has an error dispatch the failure with the data
 			dispatch(updateSpecificAnimeFailure(error));
 		}
 	};
 
+	// Function to delete the anime from database
 	const handleDelete = async () => {
 		try {
+			// Backend fetch to delete the anime from database
 			const response = await fetch(
 				`http://localhost:3001/api/anime/anime/delete/${id}`,
 				{
 					method: "DELETE",
+					credentials: "include",
 					headers: {
 						"Content-Type": "application/json",
 					},
 				}
 			);
-			console.log(response);
-			navigate("/");
+			// Parse the data from the response
+			const data = response.json();
+			// If the request is unsuccessful, sign the user out, clear the user redux state, redirect to login page
+			if (data.success === false) {
+				dispatch(signOut());
+				persistor.purge(["user"]);
+				navigate("/login");
+			}
 		} catch (error) {
+			// Console log the error
 			console.log(error);
 		}
 	};
 
 	return (
-		<div className='bg-gradient-to-br from-purple-800 to-pink-500 text-white min-h-[calc(100vh-64px)] p-4'>
+		<div className='bg-gradient-to-br from-gray-800 to-gray-700 text-white min-h-[calc(100vh-64px)] p-4'>
 			<div className='bg-gray-900 mx-auto rounded-lg p-6'>
+				{/* Form for editing anime details */}
 				<form className='grid grid-cols-2 gap-6'>
+					{/* Left column with input fields for anime details */}
 					<div className='col-span-1 space-y-4'>
 						<label className='flex flex-col'>
 							Title:
@@ -259,6 +289,7 @@ const EditAnime = () => {
 							/>
 						</label>
 					</div>
+					{/* Right column with input fields for anime details */}
 					<div className='col-span-1 space-y-4'>
 						<label className='flex flex-col'>
 							Duration:
@@ -426,14 +457,16 @@ const EditAnime = () => {
 							/>
 						</label>
 					</div>
+					{/* Button to apply edits */}
 					<button
 						type='button'
 						className='bg-gray-800 rounded-md px-4 py-2 hover:bg-purple-600 col-span-2'
-						onClick={() => test()}
+						onClick={() => editSpecificAnime()}
 					>
 						Apply
 					</button>
 				</form>
+				{/* Section for removing anime */}
 				<div className='flex mt-2 space-x-4'>
 					<button
 						className='px-5 flex-grow py-2.5 transition-all ease-in duration-75 bg-gray-800 rounded-md hover:bg-red-500 col-span-2'

@@ -9,19 +9,27 @@ import {
 } from "../redux/user/userSlice";
 
 const Profile = () => {
+	// Extract the username from the url params
 	const { username } = useParams();
+	// Redux dispatch hook
 	const dispatch = useDispatch();
+	// React router hook for navigation
 	const navigate = useNavigate();
+	// Redux state - gets current and fetched user information
 	const { currentUser, fetchedUser, loading } = useSelector(
 		(state) => state.user
 	);
+	// State to manage the anime edit updates
 	const [singleTest, setSingleTest] = useState([]);
 
+	// Fetch user data
 	useEffect(() => {
 		const fetchUserData = async () => {
+			// Redux store - dispatch action to start fetching the user
 			dispatch(getUserStart());
 			try {
-				const res = await fetch(
+				// Backend fetch to get user information
+				const response = await fetch(
 					`http://localhost:3001/api/auth/test/${username}`,
 					{
 						method: "GET",
@@ -30,7 +38,9 @@ const Profile = () => {
 						},
 					}
 				);
-				const data = await res.json();
+				// Parse the data from the response
+				const data = await response.json();
+				// Obtain the anime IDs of the 3 most recent tracked animes
 				const recentAnimeIds = Object.keys(data.trackedAnime || {})
 					.sort(
 						(a, b) =>
@@ -38,26 +48,32 @@ const Profile = () => {
 							new Date(data.trackedAnime[a].timeUpdated).getTime()
 					)
 					.slice(0, 3);
+				// Fetch specific data from the most recent IDs
 				const animeDataPromises = recentAnimeIds.map(fetchSpecificAnime);
 				const animeData = await Promise.all(animeDataPromises);
+				// Set the state with the fetched data
 				setSingleTest(animeData);
-				dispatch(getUserSuccess(data));
+				//  If the request is unsuccessful dispatch the failure "User not found!" redirect to homepage
 				if (data.success === false) {
 					dispatch(getUserFailure("User not found!"));
 					navigate("/");
-					return;
 				}
+				// If the request is successful dispatch the success with the data
+				dispatch(getUserSuccess(data));
 			} catch (error) {
+				// If the request has an error dispatch the failure witht the error message or default "something went wrong"
 				dispatch(getUserFailure(error.message || "Something went wrong!"));
 			}
 		};
-
+		// Call the fetch user data function
 		fetchUserData();
 	}, [dispatch, username, navigate]);
 
+	// Function to fetch the specific anime
 	const fetchSpecificAnime = async (animeId) => {
 		try {
-			const res = await fetch(
+			// Backend fetch to get the specific anime
+			const response = await fetch(
 				`http://localhost:3001/api/anime/anime/${animeId}`,
 				{
 					method: "GET",
@@ -66,21 +82,25 @@ const Profile = () => {
 					},
 				}
 			);
-			const data = await res.json();
+			// Parse the data from the response
+			const data = await response.json();
+			// Return the data
 			return data;
 		} catch (error) {
+			// Console log the error
 			console.error("Error fetching specific anime:", error);
-			throw error;
 		}
 	};
 
 	return (
-		<div className='bg-gradient-to-br from-purple-800 to-pink-500 text-white min-h-[calc(100vh-64px)] p-4'>
+		<div className='bg-gradient-to-br from-gray-800 to-gray-700 text-white min-h-[calc(100vh-64px)] p-4'>
+			{/* Show loading spinner when data is being fetched */}
 			{loading && (
 				<div className='flex items-center justify-center h-full'>
 					<div className='animate-spin rounded-full border-t-2 border-b-2 border-[#8A4FFF] h-12 w-12'></div>
 				</div>
 			)}
+			{/* Display user information if it exists */}
 			{fetchedUser && (
 				<div className='bg-gray-900 text-white mx-4 mt-6 rounded-lg p-6'>
 					<div className='flex items-center justify-between mb-6'>
@@ -143,70 +163,84 @@ const Profile = () => {
 									<h1 className='text-2xl font-bold mb-4'>Anime Stats</h1>
 									<div className='relative pt-1'>
 										<div className='overflow-hidden h-4 mb-2 text-xs flex bg-emerald-200'>
-											{["Watching", "Completed", "On Hold", "Dropped"].map(
-												(status, index) => (
-													<div
-														key={index}
-														style={{
-															width: `${
-																(Object.values(
-																	fetchedUser.trackedAnime || {}
-																).filter((anime) => anime.status === status)
-																	.length /
-																	Object.values(fetchedUser.trackedAnime || {})
-																		.length) *
-																100
-															}%`,
-														}}
-														className={`shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center ${
-															status === "Watching"
-																? "bg-green-500"
-																: status === "Completed"
-																? "bg-purple-500"
-																: status === "On Hold"
-																? "bg-yellow-500"
-																: status === "Dropped"
-																? "bg-red-500"
-																: ""
-														}`}
-													></div>
-												)
-											)}
+											{[
+												"Watching",
+												"Completed",
+												"On Hold",
+												"Dropped",
+												"Plan to watch",
+											].map((status, index) => (
+												<div
+													key={index}
+													style={{
+														width: `${
+															(Object.values(
+																fetchedUser.trackedAnime || {}
+															).filter((anime) => anime.status === status)
+																.length /
+																Object.values(fetchedUser.trackedAnime || {})
+																	.length) *
+															100
+														}%`,
+													}}
+													className={`shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center ${
+														status === "Watching"
+															? "bg-green-500"
+															: status === "Completed"
+															? "bg-purple-500"
+															: status === "On Hold"
+															? "bg-yellow-500"
+															: status === "Dropped"
+															? "bg-red-500"
+															: status === "Plan to watch"
+															? "bg-gray-200"
+															: ""
+													}`}
+												></div>
+											))}
 										</div>
 										<div className='flex justify-center text-xs mb-4 space-x-4'>
-											{["Watching", "Completed", "On Hold", "Dropped"].map(
-												(status, index) => (
+											{[
+												"Watching",
+												"Completed",
+												"On Hold",
+												"Dropped",
+												"Plan to watch",
+											].map((status, index) => (
+												<div
+													key={index}
+													className={`flex items-center ${
+														status === "Watching"
+															? "text-green-500"
+															: status === "Completed"
+															? "text-purple-500"
+															: status === "On Hold"
+															? "text-yellow-500"
+															: status === "Dropped"
+															? "text-red-500"
+															: status === "Plan to watch"
+															? "text-gray-200"
+															: ""
+													}`}
+												>
 													<div
-														key={index}
-														className={`flex items-center ${
+														className={`bg-${
 															status === "Watching"
-																? "text-green-500"
+																? "green-600"
 																: status === "Completed"
-																? "text-purple-500"
+																? "purple-600"
 																: status === "On Hold"
-																? "text-yellow-500"
+																? "yellow-500"
 																: status === "Dropped"
-																? "text-red-500"
+																? "red-600"
+																: status === "Plan to watch"
+																? "gray-200"
 																: ""
-														}`}
-													>
-														<div
-															className={`bg-${
-																status === "Watching"
-																	? "green-600"
-																	: status === "Completed"
-																	? "purple-600"
-																	: status === "On Hold"
-																	? "yellow-600"
-																	: status === "Dropped"
-																	? "red-600"
-																	: ""
-															} h-3 w-3 rounded-full mr-2`}
-														></div>
-														<p>{status}</p>
-													</div>
-												)
-											)}
+														} h-3 w-3 rounded-full mr-2`}
+													></div>
+													<p>{status}</p>
+												</div>
+											))}
 										</div>
 									</div>
 									<div className='flex justify-between text-sm'>
@@ -300,6 +334,21 @@ const Profile = () => {
 																<div className='w-full bg-gray-200 h-3 dark:bg-gray-700'>
 																	<div
 																		className='bg-red-600 h-3 dark:bg-red-500'
+																		style={{
+																			width: `${
+																				((fetchedUser?.trackedAnime[anime?._id]
+																					?.episodesWatched || 0) /
+																					(anime?.episodes || 1)) *
+																				100
+																			}%`,
+																		}}
+																	></div>
+																</div>
+															) : fetchedUser?.trackedAnime[anime?._id]
+																	?.status === "Plan to watch" ? (
+																<div className='w-full bg-gray-200 h-3 dark:bg-gray-700'>
+																	<div
+																		className='bg-gray-600 h-3 dark:bg-gray-500'
 																		style={{
 																			width: `${
 																				((fetchedUser?.trackedAnime[anime?._id]

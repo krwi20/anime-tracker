@@ -19,9 +19,6 @@ function App() {
 				<Route path='/' element={<Home />} />
 				<Route path='/register' element={<Register />} />
 				<Route path='/login' element={<Login />} />
-				{/* <Route path='/profile/:username' element={<PrivateRoute />}>
-					<Route index element={<Profile />} />
-				</Route> */}
 				<Route path='/profile/:username' element={<Profile />} />
 				<Route path='/anime/:id' element={<Anime />} />
 				<Route path='/settings' element={<Settings />} />

@@ -1,5 +1,6 @@
 import Anime from "../models/anime.js";
 
+// Get all the anime
 export const anime = async (req, res, next) => {
 	try {
 		const allAnime = await Anime.find();
@@ -9,6 +10,7 @@ export const anime = async (req, res, next) => {
 	}
 };
 
+// Get specific anime by ID
 export const specificAnime = async (req, res, next) => {
 	try {
 		const specificAnime = await Anime.findById(req.params.id);
@@ -18,11 +20,12 @@ export const specificAnime = async (req, res, next) => {
 	}
 };
 
+// Update specific anime by ID
 export const updateSpecificAnime = async (req, res, next) => {
 	try {
 		const updateSpecificAnime = await Anime.findById(req.params.id);
 
-		console.log(req.body);
+		// Update anime properties with request body data
 
 		updateSpecificAnime.title = req.body.title;
 		updateSpecificAnime.title_jp = req.body.title_jp;
@@ -54,8 +57,10 @@ export const updateSpecificAnime = async (req, res, next) => {
 	}
 };
 
+// Add a new anime
 export const addAnime = async (req, res, next) => {
 	try {
+		// Extract anime properties from request body
 		const {
 			title,
 			title_jp,
@@ -79,6 +84,7 @@ export const addAnime = async (req, res, next) => {
 			genres,
 		} = req.body;
 
+		// Create a new Anime instance
 		const newAnime = new Anime({
 			title,
 			title_jp,
@@ -102,6 +108,7 @@ export const addAnime = async (req, res, next) => {
 			genres,
 		});
 
+		// Save the new anime to the database
 		const savedAnime = await newAnime.save();
 		res.status(201).json(savedAnime);
 	} catch (error) {
@@ -109,7 +116,9 @@ export const addAnime = async (req, res, next) => {
 	}
 };
 
+// Delete specific anime by ID
 export const deleteAnime = async (req, res, next) => {
+	console.log(req.user.role);
 	try {
 		const deleteAnime = await Anime.findByIdAndDelete(req.params.id);
 		res.status(201).json(deleteAnime);
@@ -118,12 +127,13 @@ export const deleteAnime = async (req, res, next) => {
 	}
 };
 
+// Search for anime by title
 export const searchAnime = async (req, res, next) => {
 	try {
 		const query = req.query.query;
-
+		// Create a case-insensitive regular expression for matching the query
 		const regex = new RegExp(`^${query}`, "i");
-
+		// Find anime with titles matching the regex
 		const matchingAnime = await Anime.find({ title: regex });
 
 		res.status(200).json(matchingAnime);

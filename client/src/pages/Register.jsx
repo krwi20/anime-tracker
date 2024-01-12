@@ -1,34 +1,47 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {
+	// State to manage the form data
 	const [formData, setFormData] = useState({});
+	// State to manage the error
 	const [error, setError] = useState(false);
+	// State to manage loading
 	const [loading, setLoading] = useState(false);
+	// React router hook for navigation
 	const navigate = useNavigate();
 
+	// Function to set the formData to the user's input
 	const handleChange = (e) => {
 		setFormData({ ...formData, [e.target.id]: e.target.value });
 	};
 
+	// Function to handle the form submission
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
 			setLoading(true);
 			setError(false);
-			const res = await axios.post(
-				"http://localhost:3001/api/auth/register",
-				formData
-			);
-			const data = res.data;
-			setLoading(false);
+			// Backend fetch to register the user
+			const response = await fetch("http://localhost:3001/api/auth/register", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(formData),
+			});
+			// Parse the response data
+			const data = response.data;
+			// If the request is unsuccessful set the error to true
 			if (data.success === false) {
 				setError(true);
 				return;
 			}
+			// if the request is successful set loading to false and redirect to login
+			setLoading(false);
 			navigate("/login");
 		} catch (error) {
+			// If the request has an error set loading to false and error to true
 			setLoading(false);
 			setError(true);
 		}

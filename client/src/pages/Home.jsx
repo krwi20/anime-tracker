@@ -9,39 +9,49 @@ import {
 } from "../redux/anime/animeSlice";
 
 const Home = () => {
+	// Redux state - gets anime information
 	const { fetchedAllAnime, loading } = useSelector((state) => state.anime);
-
+	// Redux dispatch hook
 	const dispatch = useDispatch();
 
+	// Fetch all anime data
 	useEffect(() => {
 		const fetchAnime = async () => {
 			try {
+				// Redux store - dispatch action to start getting all anime
 				dispatch(getAllAnimeStart());
-				const res = await fetch(`http://localhost:3001/api/anime/anime`, {
+				// Backend fetch to get all the anime from database
+				const response = await fetch(`http://localhost:3001/api/anime/anime`, {
 					method: "GET",
 					headers: {
 						"Content-Type": "application/json",
 					},
 				});
-				const data = await res.json();
+				// Parse the data from the response
+				const data = await response.json();
+				// If the request is unsuccessful dispatch the failure with the data
 				if (data.success === false) {
 					dispatch(getAllAnimeFailure(data));
 					return;
 				}
-
+				// If the request is successful dispatch the success with the data
 				dispatch(getAllAnimeSuccess(data));
 			} catch (error) {
+				// If the request has en error dispatch the failure with the error
 				dispatch(getAllAnimeFailure(error));
 			}
 		};
-
+		// Call function to fetch anime
 		fetchAnime();
 	}, [dispatch]);
 
+	// Function to get the current season
 	const getSeason = () => {
+		// Get the current month
 		const currentDate = new Date();
 		const currentMonth = currentDate.getMonth() + 1;
 
+		// Determining which months are which season
 		if (currentMonth >= 3 && currentMonth <= 5) {
 			return "Spring";
 		} else if (currentMonth >= 6 && currentMonth <= 8) {
@@ -54,13 +64,15 @@ const Home = () => {
 	};
 
 	return (
-		<div className='bg-gradient-to-br from-purple-800 to-pink-500 text-white min-h-[calc(100vh-64px)] p-4'>
+		<div className='bg-gradient-to-br from-gray-800 to-gray-700 text-white min-h-[calc(100vh-64px)] p-4'>
+			{/* Loading spinner while being fetched */}
 			{loading && (
 				<div className='flex items-center justify-center h-full'>
 					<div className='animate-spin rounded-full border-t-2 border-b-2 border-[#8A4FFF] h-12 w-12'></div>
 				</div>
 			)}
 			{fetchedAllAnime && (
+				// Display all the fetched anime if there is any
 				<div className='bg-gray-900 text-white mx-4 mt-6 rounded-lg p-6'>
 					<div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
 						<div className='col-span-2'>
@@ -68,6 +80,7 @@ const Home = () => {
 								{getSeason()} Anime {new Date().getFullYear()}
 							</h2>
 							<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+								{/* Display the animes which are in the current season and year */}
 								{fetchedAllAnime
 									.filter(
 										(anime) =>

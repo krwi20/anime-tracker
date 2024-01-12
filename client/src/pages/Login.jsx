@@ -9,35 +9,47 @@ import {
 } from "../redux/user/userSlice";
 
 const Login = () => {
+	// State to manage the form data
 	const [formData, setFormData] = useState({});
+	// Redux state - gets user information
 	const { loading, error } = useSelector((state) => state.user);
-
+	// React router hook for navigation
 	const navigate = useNavigate();
+	// Redux dispatch hook
 	const dispatch = useDispatch();
 
+	// Function to set the formData to the user's input
 	const handleChange = (e) => {
 		setFormData({ ...formData, [e.target.id]: e.target.value });
 	};
 
+	// Function to handle the form submission
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
+			// Redux store - dispatch action to start sign in
 			dispatch(signInStart());
-			const res = await fetch("http://localhost:3001/api/auth/login", {
+			// Backend fetch to log the user in
+			const response = await fetch("http://localhost:3001/api/auth/login", {
 				method: "POST",
+				credentials: "include",
 				headers: {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify(formData),
 			});
-			const data = await res.json();
+			// Parse the response data
+			const data = await response.json();
+			// If the request is unsuccessful dispatch the failure with the data
 			if (data.success === false) {
 				dispatch(signInFailure(data));
 				return;
 			}
+			// If the request is successful dispatch the success with the data, redirect to homepage
 			dispatch(signInSuccess(data));
 			navigate("/");
 		} catch (error) {
+			// If the request has en error dispatch the failure with the error
 			dispatch(signInFailure(error));
 		}
 	};

@@ -31,7 +31,13 @@ const userSchema = new mongoose.Schema(
 			of: {
 				status: {
 					type: String,
-					enum: ["Watching", "Completed"],
+					enum: [
+						"Watching",
+						"Completed",
+						"Dropped",
+						"On Hold",
+						"Plan to watch",
+					],
 					required: true,
 				},
 				episodesWatched: {
@@ -48,6 +54,7 @@ const userSchema = new mongoose.Schema(
 					default: 0,
 				},
 			},
+			default: {},
 		},
 	},
 
