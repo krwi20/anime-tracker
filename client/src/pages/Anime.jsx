@@ -291,16 +291,18 @@ const Anime = () => {
 										<p className='text-lg mb-4'>
 											{fetchedSpecificAnime.title_jp}
 										</p>
-										<div className='mb-4'>
+										<div className='flex mb-4'>
 											<img
 												src={fetchedSpecificAnime.customImageURL}
 												alt={fetchedSpecificAnime.title}
-												className='w-full h-full object-cover rounded-md'
+												className='w-1/2 h-full object-cover rounded-md'
 												style={{ width: "225px", height: "318px" }}
 											/>
+											<div className='w-1/2 ml-4'>
+												<span className='text-lg font-bold'>Description:</span>
+												<p>{fetchedSpecificAnime.description}</p>
+											</div>
 										</div>
-										<span className='text-lg font-bold'>Description:</span>
-										<p>{fetchedSpecificAnime.description}</p>
 									</div>
 								</div>
 								{/* Center column - anime details */}
@@ -395,7 +397,7 @@ const Anime = () => {
 											</button>
 											<button onClick={() => trackAnime("Plan to watch")}>
 												<span
-													className={`px-5 py-2.5 transition-all ease-in duration-75 bg-gray-800 rounded-md hover:bg-purple-600 
+													className={`px-5 py-2.5 transition-all ease-in duration-75 bg-gray-800 rounded-md hover:bg-purpl	e-600 
 							${
 								currentUser?.trackedAnime?.[id]?.status === "Plan to watch"
 									? "bg-purple-600"
