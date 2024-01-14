@@ -276,7 +276,12 @@ const Profile = () => {
 										</div>
 									</div>
 									<div className='flex space-x-4 mb-6'>
-										<button className='bg-gray-800 rounded-md flex-grow px-4 py-2 hover:bg-purple-600'>
+										<button
+											className='bg-gray-800 rounded-md flex-grow px-4 py-2 hover:bg-purple-600'
+											onClick={() =>
+												navigate(`/${fetchedUser.username}/anime-list`)
+											}
+										>
 											Anime List
 										</button>
 										<button className='bg-gray-800 rounded-md flex-grow px-4 py-2 hover:bg-purple-600'>

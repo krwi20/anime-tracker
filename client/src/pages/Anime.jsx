@@ -300,6 +300,7 @@ const Anime = () => {
 											/>
 											<div className='w-1/2 ml-4'>
 												<span className='text-lg font-bold'>Description:</span>
+												<div class='border-b-2 border-gray-700'></div>
 												<p>{fetchedSpecificAnime.description}</p>
 											</div>
 										</div>
@@ -309,6 +310,7 @@ const Anime = () => {
 								<div className='lg:col-span-1 space-y-4'>
 									<div className='flex flex-col'>
 										<span className='text-lg font-bold'>Details:</span>
+										<div class='border-b-2 border-gray-700'></div>
 										<div className='flex flex-col mt-2 space-y-2'>
 											{/* Anime Details */}
 											<span>
@@ -335,15 +337,21 @@ const Anime = () => {
 											</span>
 											<span>
 												<span className='font-bold'>Producers:</span>{" "}
-												{fetchedSpecificAnime?.producers.join(", ")}
+												{fetchedSpecificAnime.producers
+													? fetchedSpecificAnime.producers.join(", ")
+													: ""}
 											</span>
 											<span>
 												<span className='font-bold'>Licensors:</span>{" "}
-												{fetchedSpecificAnime.licensors.join(", ")}
+												{fetchedSpecificAnime.licensors
+													? fetchedSpecificAnime.licensors.join(", ")
+													: ""}
 											</span>
 											<span>
 												<span className='font-bold'>Studios:</span>{" "}
-												{fetchedSpecificAnime.studios.join(", ")}
+												{fetchedSpecificAnime.studios
+													? fetchedSpecificAnime.studios.join(", ")
+													: ""}
 											</span>
 											<span>
 												<span className='font-bold'>Source:</span>{" "}
@@ -351,7 +359,9 @@ const Anime = () => {
 											</span>
 											<span>
 												<span className='font-bold'>Genres:</span>{" "}
-												{fetchedSpecificAnime.genres.join(", ")}
+												{fetchedSpecificAnime.genres
+													? fetchedSpecificAnime.genres.join(", ")
+													: ""}
 											</span>
 											<span>
 												<span className='font-bold'>Duration:</span>{" "}

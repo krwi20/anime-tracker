@@ -118,7 +118,6 @@ export const addAnime = async (req, res, next) => {
 
 // Delete specific anime by ID
 export const deleteAnime = async (req, res, next) => {
-	console.log(req.user.role);
 	try {
 		const deleteAnime = await Anime.findByIdAndDelete(req.params.id);
 		res.status(201).json(deleteAnime);

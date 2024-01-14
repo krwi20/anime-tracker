@@ -10,6 +10,7 @@ import Anime from "./pages/Anime";
 import Settings from "./pages/Settings";
 import EditAnime from "./pages/EditAnime";
 import AddAnime from "./pages/AddAnime";
+import AnimeList from "./pages/AnimeList";
 
 function App() {
 	return (
@@ -28,6 +29,7 @@ function App() {
 				<Route path='/add/anime' element={<PrivateRoute />}>
 					<Route index element={<AddAnime />} />
 				</Route>
+				<Route path='/:username/anime-list' element={<AnimeList />} />
 			</Routes>
 		</BrowserRouter>
 	);

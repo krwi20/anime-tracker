@@ -63,6 +63,7 @@ const EditAnime = () => {
 				`http://localhost:3001/api/anime/anime/edit/${id}`,
 				{
 					method: "PATCH",
+					credentials: "include",
 					headers: {
 						"Content-Type": "application/json",
 					},
@@ -111,6 +112,7 @@ const EditAnime = () => {
 				persistor.purge(["user"]);
 				navigate("/login");
 			}
+			navigate("/");
 		} catch (error) {
 			// Console log the error
 			console.log(error);
