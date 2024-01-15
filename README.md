@@ -19,7 +19,6 @@ AnimeTracker is a full-stack web application designed for anime enthusiasts to e
 - **State Management**: Redux Toolkit
 - **Authentication**: JWT (JSON Web Tokens)
 - **Styling**: Tailwind CSS
-- **API Calls**: Axios
 
 ## Acknowledgements 🎉
 
