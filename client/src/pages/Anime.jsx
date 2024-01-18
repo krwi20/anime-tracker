@@ -295,8 +295,7 @@ const Anime = () => {
 											<img
 												src={fetchedSpecificAnime.customImageURL}
 												alt={fetchedSpecificAnime.title}
-												className='w-1/2 h-full object-cover rounded-md'
-												style={{ width: "225px", height: "318px" }}
+												className='object-cover rounded-md w-[225px] h-[318px]'
 											/>
 											<div className='w-1/2 ml-4'>
 												<span className='text-lg font-bold'>Description:</span>

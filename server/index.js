@@ -3,12 +3,22 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
 import authRoutes from "./routes/auth.js";
 import animeRoutes from "./routes/anime.js";
 
 // Load environment variables from the .env file
 dotenv.config();
+
+// S3 Bucket connection setup
+export const s3 = new S3Client({
+	region: process.env.BUCKET_REGION,
+	credentials: {
+		accessKeyId: process.env.ACCESS_KEY,
+		secretAccessKey: process.env.SECRET_ACCESS_KEY,
+	},
+});
 
 // Connect to MongoDB database
 mongoose

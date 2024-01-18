@@ -35,6 +35,8 @@ const AddAnime = () => {
 		studios: [],
 		genres: [],
 	});
+	// State to store the image file
+	const [imageFile, setImageFile] = useState(null);
 
 	// Function to handle the input changes in the form
 	const handleChange = (e) => {
@@ -111,16 +113,21 @@ const AddAnime = () => {
 		e.preventDefault();
 
 		try {
+			// Create a new FormData object to send data as a multipart/form-data for the image file
+			const formDataWithImage = new FormData();
+			// Iterate over the properties of formData
+			Object.entries(formData).forEach(([key, value]) => {
+				formDataWithImage.append(key, value);
+			});
+			// Change the customImageURL property to the FormData - using the selected image file
+			formDataWithImage.append("customImageURL", imageFile);
 			// Backend fetch to add the anime to the database
 			const response = await fetch(
 				"http://localhost:3001/api/anime/anime/add",
 				{
 					method: "POST",
 					credentials: "include",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(formData),
+					body: formDataWithImage,
 				}
 			);
 			// Parse the data from the response
@@ -174,10 +181,10 @@ const AddAnime = () => {
 						<label className='flex flex-col'>
 							Image:
 							<input
-								type='text'
+								type='file'
 								id='customImageURL'
 								className='rounded-md bg-gray-800 p-2'
-								onChange={handleChange}
+								onChange={(e) => setImageFile(e.target.files[0])}
 							/>
 						</label>
 						<label className='flex flex-col'>
@@ -185,6 +192,7 @@ const AddAnime = () => {
 							<input
 								type='text'
 								id='type'
+								accept='image/jpeg, image/png'
 								className='rounded-md bg-gray-800 p-2'
 								onChange={handleChange}
 							/>

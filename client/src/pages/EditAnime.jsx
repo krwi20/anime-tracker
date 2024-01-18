@@ -14,7 +14,7 @@ const EditAnime = () => {
 	// Extract the id from the url params
 	const { id } = useParams();
 	// Redux state - gets anime information
-	const { fetchedSpecificAnime, loading } = useSelector((state) => state.anime);
+	const { fetchedSpecificAnime } = useSelector((state) => state.anime);
 	// Redux dispatch hook
 	const dispatch = useDispatch();
 	// React router hook for navigation
@@ -47,6 +47,10 @@ const EditAnime = () => {
 		studios: fetchedSpecificAnime.studios || [],
 		genres: fetchedSpecificAnime.genres || [],
 	});
+	// State to store the image file
+	const [imageFile, setImageFile] = useState(null);
+	// State to store the uploaded image temporarily to show the user the new image
+	const [temporaryImageURL, setTemporaryImageURL] = useState(null);
 
 	// Function to format the timestamp into more readable data
 	function formatDate(dateString) {
@@ -58,16 +62,24 @@ const EditAnime = () => {
 		try {
 			// Redux store - dispatch action to start updating specific anime data
 			dispatch(updateSpecificAnimeStart());
+			// Create a new FormData object to send data as a multipart/form-data for the image file
+			const formDataWithImage = new FormData();
+			// Iterate over the properties of updatedAnimeData
+			Object.entries(updatedAnimeData).forEach(([key, value]) => {
+				// Exclude the "image" property from the FormData
+				if (key !== "image") {
+					formDataWithImage.append(key, value);
+				}
+			});
+			// Change the customImageURL property to the FormData - using the selected image file
+			formDataWithImage.append("customImageURL", imageFile);
 			// Backend fetch to update the anime with new details
 			const response = await fetch(
 				`http://localhost:3001/api/anime/anime/edit/${id}`,
 				{
 					method: "PATCH",
 					credentials: "include",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(updatedAnimeData),
+					body: formDataWithImage,
 				}
 			);
 			// Parse the data from the response
@@ -82,11 +94,15 @@ const EditAnime = () => {
 			}
 			// // If the request is successful dispatch the success witht the data
 			dispatch(updateSpecificAnimeSuccess(data));
-			// Redirect to the specific anime page
+			// Clear the temporary image display
+			setTemporaryImageURL(null);
+			// Redirect to the specific anime page - currently issues with image reloading on edit
 			navigate(`/anime/${id}`);
 		} catch (error) {
 			// If the request has an error dispatch the failure with the data
 			dispatch(updateSpecificAnimeFailure(error));
+			// Clear the temporary image display
+			setTemporaryImageURL(null);
 		}
 	};
 
@@ -172,17 +188,20 @@ const EditAnime = () => {
 						</label>
 						<label className='flex flex-col'>
 							Image:
+							<img
+								src={temporaryImageURL || updatedAnimeData.image}
+								className='w-[255px] h-[318px]'
+								alt=''
+							/>
 							<input
-								type='text'
+								type='file'
 								id='customImageURL'
-								className='rounded-md bg-gray-800 p-2'
-								value={updatedAnimeData.image}
-								onChange={(e) =>
-									setUpdatedAnimeData({
-										...updatedAnimeData,
-										image: e.target.value,
-									})
-								}
+								accept='image/jpeg, image/png'
+								className='rounded-md bg-gray-800 p-2 mt-4'
+								onChange={(e) => {
+									setImageFile(e.target.files[0]);
+									setTemporaryImageURL(URL.createObjectURL(e.target.files[0]));
+								}}
 							/>
 						</label>
 						<label className='flex flex-col'>
