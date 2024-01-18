@@ -300,8 +300,10 @@ const Anime = () => {
 											/>
 											<div className='w-1/2 ml-4'>
 												<span className='text-lg font-bold'>Description:</span>
-												<div class='border-b-2 border-gray-700'></div>
-												<p>{fetchedSpecificAnime.description}</p>
+												<div className='border-b-2 border-gray-700'></div>
+												<p className='w-full'>
+													{fetchedSpecificAnime.description}
+												</p>
 											</div>
 										</div>
 									</div>
@@ -310,7 +312,7 @@ const Anime = () => {
 								<div className='lg:col-span-1 space-y-4'>
 									<div className='flex flex-col'>
 										<span className='text-lg font-bold'>Details:</span>
-										<div class='border-b-2 border-gray-700'></div>
+										<div className='border-b-2 border-gray-700'></div>
 										<div className='flex flex-col mt-2 space-y-2'>
 											{/* Anime Details */}
 											<span>
@@ -329,7 +331,7 @@ const Anime = () => {
 												<span className='font-bold'>Aired:</span>{" "}
 												{`${formatDate(
 													fetchedSpecificAnime.airedFrom
-												)} to ${formatDate(fetchedSpecificAnime.airedTo)}`}
+												)} to ${formatDate(fetchedSpecificAnime.airedUntil)}`}
 											</span>
 											<span>
 												<span className='font-bold'>Premiered:</span>{" "}

@@ -130,7 +130,7 @@ const Profile = () => {
 								</div>
 								{currentUser &&
 									currentUser.username === fetchedUser.username && (
-										<button className='bg-purple-600 rounded-md px-4 py-2 hover:bg-purple-700'>
+										<button className='bg-blue-600 rounded-md px-4 py-2 hover:bg-blue-700'>
 											Edit Profile
 										</button>
 									)}
@@ -195,7 +195,7 @@ const Profile = () => {
 																status === "Watching"
 																	? "bg-green-500"
 																	: status === "Completed"
-																	? "bg-purple-500"
+																	? "bg-blue-500"
 																	: status === "On Hold"
 																	? "bg-yellow-500"
 																	: status === "Dropped"
@@ -221,7 +221,7 @@ const Profile = () => {
 																status === "Watching"
 																	? "text-green-500"
 																	: status === "Completed"
-																	? "text-purple-500"
+																	? "text-blue-500"
 																	: status === "On Hold"
 																	? "text-yellow-500"
 																	: status === "Dropped"
@@ -236,7 +236,7 @@ const Profile = () => {
 																	status === "Watching"
 																		? "green-600"
 																		: status === "Completed"
-																		? "purple-600"
+																		? "blue-500"
 																		: status === "On Hold"
 																		? "yellow-500"
 																		: status === "Dropped"
@@ -277,14 +277,14 @@ const Profile = () => {
 									</div>
 									<div className='flex space-x-4 mb-6'>
 										<button
-											className='bg-gray-800 rounded-md flex-grow px-4 py-2 hover:bg-purple-600'
+											className='bg-gray-800 rounded-md flex-grow px-4 py-2 hover:bg-blue-600'
 											onClick={() =>
 												navigate(`/${fetchedUser.username}/anime-list`)
 											}
 										>
 											Anime List
 										</button>
-										<button className='bg-gray-800 rounded-md flex-grow px-4 py-2 hover:bg-purple-600'>
+										<button className='bg-gray-800 rounded-md flex-grow px-4 py-2 hover:bg-blue-600'>
 											Manga List
 										</button>
 									</div>
@@ -387,7 +387,7 @@ const Profile = () => {
 																	) : (
 																		<div className='w-full bg-gray-200 h-3 dark:bg-gray-700'>
 																			<div
-																				className='bg-purple-600 h-3 dark:bg-purple-500'
+																				className='bg-blue-600 h-3 dark:bg-blue-500'
 																				style={{
 																					width: `${
 																						((fetchedUser?.trackedAnime[

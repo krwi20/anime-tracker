@@ -74,40 +74,42 @@ const Home = () => {
 			{fetchedAllAnime && (
 				// Display all the fetched anime if there is any
 				<div className='bg-gray-900 text-white mx-4 mt-6 rounded-lg p-6'>
-					<div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
-						<div className='col-span-2'>
-							<h2 className='text-3xl font-bold mb-6'>
-								{getSeason()} Anime {new Date().getFullYear()}
-							</h2>
-							<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-								{/* Display the animes which are in the current season and year */}
-								{fetchedAllAnime
-									.filter(
-										(anime) =>
-											anime.season === getSeason() &&
-											anime.year === new Date().getFullYear()
-									)
-									.map((anime) => (
-										<Link to={`/anime/${anime._id}`} key={anime._id}>
-											<div className='bg-gray-800 rounded-lg overflow-hidden'>
-												<div className='h-40 relative'>
-													<img
-														src={anime.customImageURL}
-														alt={anime.title}
-														className='absolute top-0 left-0 w-full h-full object-cover'
-													/>
-												</div>
-												<div className='p-4'>
-													<p className='text-lg font-bold mb-2 cursor-pointer'>
-														{anime.title}
-													</p>
-													<p className='text-xs text-gray-400 line-clamp-3'></p>
-												</div>
-											</div>
-										</Link>
-									))}
-							</div>
-						</div>
+					<h2 className='text-3xl font-bold mb-6'>
+						{getSeason()} Anime {new Date().getFullYear()}
+					</h2>
+					{/* Display the animes which are in the current season and year */}
+					<div className='flex flex-wrap gap-8'>
+						{fetchedAllAnime
+							.filter(
+								(anime) =>
+									anime.season === getSeason() &&
+									anime.year === new Date().getFullYear()
+							)
+							.map((anime) => (
+								<Link to={`/anime/${anime._id}`} key={anime._id}>
+									<div className='bg-gray-800 p-4 rounded-lg flex items-start space-x-4 w-[500px] hover:bg-gray-700'>
+										{/* Anime Image */}
+										<img
+											src={anime.customImageURL}
+											alt={anime.title}
+											className='w-36 h-52 object-cover rounded-lg'
+										/>
+										{/* Anime Information */}
+										<div className='flex flex-col flex-grow'>
+											<h3 className='text-xl font-bold break-words'>
+												{anime.title}
+											</h3>
+											<div className='border-b-2 border-gray-700 mb-2'></div>
+											<p className='text-gray-400 break-words'>
+												{/* Limiting the description length and adding ellipsis */}
+												{anime.description.length > 150
+													? `${anime.description.slice(0, 150)}...`
+													: anime.description}
+											</p>
+										</div>
+									</div>
+								</Link>
+							))}
 					</div>
 				</div>
 			)}

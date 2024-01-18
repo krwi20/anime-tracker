@@ -121,7 +121,7 @@ const AnimeList = () => {
 											className={`text-sm ${
 												fetchedUser.trackedAnime[anime._id]?.status ===
 												"Completed"
-													? "text-green-500"
+													? "text-blue-500"
 													: fetchedUser.trackedAnime[anime._id]?.status ===
 													  "Dropped"
 													? "text-red-500"
@@ -133,7 +133,7 @@ const AnimeList = () => {
 													? "text-gray-200"
 													: fetchedUser.trackedAnime[anime._id]?.status ===
 													  "Watching"
-													? "text-blue-500"
+													? "text-green-500"
 													: ""
 											}`}
 										>

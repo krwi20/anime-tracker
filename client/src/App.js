@@ -23,10 +23,10 @@ function App() {
 				<Route path='/profile/:username' element={<Profile />} />
 				<Route path='/anime/:id' element={<Anime />} />
 				<Route path='/settings' element={<Settings />} />
-				<Route path='/edit/anime/:id' element={<PrivateRoute />}>
+				<Route path='/edit/anime/:id' element={<PrivateRoute role='admin' />}>
 					<Route index element={<EditAnime />} />
 				</Route>
-				<Route path='/add/anime' element={<PrivateRoute />}>
+				<Route path='/add/anime' element={<PrivateRoute role='admin' />}>
 					<Route index element={<AddAnime />} />
 				</Route>
 				<Route path='/:username/anime-list' element={<AnimeList />} />

@@ -42,6 +42,7 @@ const userSchema = new mongoose.Schema(
 				},
 				episodesWatched: {
 					type: Number,
+					default: 0,
 					required: true,
 				},
 				timeUpdated: {
