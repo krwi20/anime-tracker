@@ -179,14 +179,17 @@ const Anime = () => {
 
 	// Function to update the user's amount of episodes watched
 	const updateEpisodesWatched = async () => {
-		// If the user's input is > the total amount of episodes for the anime, set the user's input as the highest episode count
 		let value = episodesWatched;
-		if (value > fetchedSpecificAnime.episodes) {
+		// If the total episodes are known, check if the user's input exceeds the total episodes
+		if (
+			fetchedSpecificAnime.episodes !== null &&
+			value > fetchedSpecificAnime.episodes
+		) {
 			value = fetchedSpecificAnime.episodes;
-			// If the user's input is < 0, set the user's input to 0
-		} else if (value < 0) {
-			value = 0;
 		}
+		// If the user's input is < 0, set the user's input to 0
+		value = Math.max(0, value);
+
 		try {
 			// Dispatch - start update the user
 			dispatch(updateUserStart());
@@ -226,9 +229,13 @@ const Anime = () => {
 
 	// Function to update the user's episodes watched by 1
 	const updateEpisodesWatchedByOne = async () => {
-		// The user's episode count for this anime will be increased by 1
-		let value = currentUser?.trackedAnime?.[id]?.episodesWatched + 1;
-		// If it is increased over the total episode count for the anime, it will set the value as the highest amount of episodes
+		// Get the user's episode count for this anime
+		let value = currentUser?.trackedAnime?.[id]?.episodesWatched;
+
+		// If it's undefined, set the value to 1; otherwise, increment it
+		value = value === undefined ? 1 : value + 1;
+
+		// If it is increased over the total episode count for the anime, set the value as the highest amount of episodes
 		if (value > fetchedSpecificAnime.episodes) {
 			value = fetchedSpecificAnime.episodes;
 		}
@@ -320,7 +327,9 @@ const Anime = () => {
 											</span>
 											<span>
 												<span className='font-bold'>Episodes:</span>{" "}
-												{fetchedSpecificAnime.episodes}
+												{fetchedSpecificAnime.episodes
+													? fetchedSpecificAnime.episodes
+													: "Unknown"}
 											</span>
 											<span>
 												<span className='font-bold'>Status:</span>{" "}
@@ -328,31 +337,50 @@ const Anime = () => {
 											</span>
 											<span>
 												<span className='font-bold'>Aired:</span>{" "}
-												{`${formatDate(
-													fetchedSpecificAnime.airedFrom
-												)} to ${formatDate(fetchedSpecificAnime.airedUntil)}`}
+												{fetchedSpecificAnime.airedUntil
+													? `${formatDate(
+															fetchedSpecificAnime.airedFrom
+													  )} to ${formatDate(
+															fetchedSpecificAnime.airedUntil
+													  )}`
+													: `Aired from ${formatDate(
+															fetchedSpecificAnime.airedFrom
+													  )} - ?`}
 											</span>
 											<span>
 												<span className='font-bold'>Premiered:</span>{" "}
-												{fetchedSpecificAnime.premiered}
+												{fetchedSpecificAnime.season +
+													" " +
+													fetchedSpecificAnime.year}
 											</span>
 											<span>
 												<span className='font-bold'>Producers:</span>{" "}
-												{fetchedSpecificAnime.producers
-													? fetchedSpecificAnime.producers.join(", ")
-													: ""}
+												{fetchedSpecificAnime.producers &&
+												fetchedSpecificAnime.producers.filter(Boolean).length >
+													0
+													? fetchedSpecificAnime.producers
+															.filter(Boolean)
+															.join(", ")
+													: "None added"}
 											</span>
 											<span>
 												<span className='font-bold'>Licensors:</span>{" "}
-												{fetchedSpecificAnime.licensors
-													? fetchedSpecificAnime.licensors.join(", ")
-													: ""}
+												{fetchedSpecificAnime.licensors &&
+												fetchedSpecificAnime.licensors.filter(Boolean).length >
+													0
+													? fetchedSpecificAnime.licensors
+															.filter(Boolean)
+															.join(", ")
+													: "None added"}
 											</span>
 											<span>
 												<span className='font-bold'>Studios:</span>{" "}
-												{fetchedSpecificAnime.studios
-													? fetchedSpecificAnime.studios.join(", ")
-													: ""}
+												{fetchedSpecificAnime.studios &&
+												fetchedSpecificAnime.studios.filter(Boolean).length > 0
+													? fetchedSpecificAnime.studios
+															.filter(Boolean)
+															.join(", ")
+													: "None added"}
 											</span>
 											<span>
 												<span className='font-bold'>Source:</span>{" "}
@@ -360,9 +388,12 @@ const Anime = () => {
 											</span>
 											<span>
 												<span className='font-bold'>Genres:</span>{" "}
-												{fetchedSpecificAnime.genres
-													? fetchedSpecificAnime.genres.join(", ")
-													: ""}
+												{fetchedSpecificAnime.genres &&
+												fetchedSpecificAnime.genres.filter(Boolean).length > 0
+													? fetchedSpecificAnime.genres
+															.filter(Boolean)
+															.join(", ")
+													: "None added"}
 											</span>
 											<span>
 												<span className='font-bold'>Duration:</span>{" "}
@@ -448,6 +479,7 @@ const Anime = () => {
 									<div className='flex flex-col'>
 										<span className='text-lg font-bold'>Your Rating:</span>
 										<div className='flex mt-2 space-x-4'>
+											{/* TODO - ADD OPTION TO REMOVE RATING */}
 											{/* Rating options */}
 											{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
 												<button

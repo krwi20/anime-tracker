@@ -327,11 +327,16 @@ const Profile = () => {
 																				className='bg-green-600 h-3 dark:bg-green-500'
 																				style={{
 																					width: `${
-																						((fetchedUser?.trackedAnime[
+																						fetchedUser?.trackedAnime[
 																							anime?._id
-																						]?.episodesWatched || 0) /
-																							(anime?.episodes || 1)) *
-																						100
+																						]?.episodesWatched !== null &&
+																						anime?.episodes !== null
+																							? ((fetchedUser?.trackedAnime[
+																									anime?._id
+																							  ]?.episodesWatched || 0) /
+																									anime?.episodes) *
+																							  100
+																							: 50
 																					}%`,
 																				}}
 																			></div>
@@ -343,11 +348,16 @@ const Profile = () => {
 																				className='bg-yellow-400 h-3'
 																				style={{
 																					width: `${
-																						((fetchedUser?.trackedAnime[
+																						fetchedUser?.trackedAnime[
 																							anime?._id
-																						]?.episodesWatched || 0) /
-																							(anime?.episodes || 1)) *
-																						100
+																						]?.episodesWatched !== null &&
+																						anime?.episodes !== null
+																							? ((fetchedUser?.trackedAnime[
+																									anime?._id
+																							  ]?.episodesWatched || 0) /
+																									anime?.episodes) *
+																							  100
+																							: 50
 																					}%`,
 																				}}
 																			></div>
@@ -359,11 +369,16 @@ const Profile = () => {
 																				className='bg-red-600 h-3 dark:bg-red-500'
 																				style={{
 																					width: `${
-																						((fetchedUser?.trackedAnime[
+																						fetchedUser?.trackedAnime[
 																							anime?._id
-																						]?.episodesWatched || 0) /
-																							(anime?.episodes || 1)) *
-																						100
+																						]?.episodesWatched !== null &&
+																						anime?.episodes !== null
+																							? ((fetchedUser?.trackedAnime[
+																									anime?._id
+																							  ]?.episodesWatched || 0) /
+																									anime?.episodes) *
+																							  100
+																							: 50
 																					}%`,
 																				}}
 																			></div>
@@ -375,11 +390,16 @@ const Profile = () => {
 																				className='bg-gray-600 h-3 dark:bg-gray-500'
 																				style={{
 																					width: `${
-																						((fetchedUser?.trackedAnime[
+																						fetchedUser?.trackedAnime[
 																							anime?._id
-																						]?.episodesWatched || 0) /
-																							(anime?.episodes || 1)) *
-																						100
+																						]?.episodesWatched !== null &&
+																						anime?.episodes !== null
+																							? ((fetchedUser?.trackedAnime[
+																									anime?._id
+																							  ]?.episodesWatched || 0) /
+																									anime?.episodes) *
+																							  100
+																							: 50
 																					}%`,
 																				}}
 																			></div>
@@ -390,11 +410,16 @@ const Profile = () => {
 																				className='bg-blue-600 h-3 dark:bg-blue-500'
 																				style={{
 																					width: `${
-																						((fetchedUser?.trackedAnime[
+																						fetchedUser?.trackedAnime[
 																							anime?._id
-																						]?.episodesWatched || 0) /
-																							(anime?.episodes || 1)) *
-																						100
+																						]?.episodesWatched !== null &&
+																						anime?.episodes !== null
+																							? ((fetchedUser?.trackedAnime[
+																									anime?._id
+																							  ]?.episodesWatched || 0) /
+																									anime?.episodes) *
+																							  100
+																							: 100
 																					}%`,
 																				}}
 																			></div>

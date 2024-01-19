@@ -66,8 +66,17 @@ const EditAnime = () => {
 			const formDataWithImage = new FormData();
 			// Iterate over the properties of updatedAnimeData
 			Object.entries(updatedAnimeData).forEach(([key, value]) => {
-				// Exclude the "image" property from the FormData
-				if (key !== "image") {
+				if (key === "broadcast") {
+					const { day, time, timezone } = value;
+					formDataWithImage.append("broadcast[day]", day);
+					formDataWithImage.append("broadcast[time]", time);
+					formDataWithImage.append("broadcast[timezone]", timezone);
+				} else if (Array.isArray(value)) {
+					// If the value is an array, append each element individually
+					value.forEach((item) => {
+						formDataWithImage.append(`${key}[]`, item);
+					});
+				} else {
 					formDataWithImage.append(key, value);
 				}
 			});
@@ -190,7 +199,7 @@ const EditAnime = () => {
 							Image:
 							<img
 								src={temporaryImageURL || updatedAnimeData.image}
-								className='w-[255px] h-[318px]'
+								className='w-[255px] h-[318px] object-cover'
 								alt=''
 							/>
 							<input
@@ -264,6 +273,9 @@ const EditAnime = () => {
 								}
 							/>
 						</label>
+					</div>
+					{/* Right column with input fields for anime details */}
+					<div className='col-span-1 space-y-4'>
 						<label className='flex flex-col'>
 							Airing:
 							<input
@@ -309,9 +321,6 @@ const EditAnime = () => {
 								}
 							/>
 						</label>
-					</div>
-					{/* Right column with input fields for anime details */}
-					<div className='col-span-1 space-y-4'>
 						<label className='flex flex-col'>
 							Duration:
 							<input

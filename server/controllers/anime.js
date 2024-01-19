@@ -97,6 +97,7 @@ export const addAnime = async (req, res, next) => {
 			licensors,
 			studios,
 			genres,
+			source,
 		} = req.body;
 
 		// Define customImageURL
@@ -143,6 +144,7 @@ export const addAnime = async (req, res, next) => {
 			licensors,
 			studios,
 			genres,
+			source,
 		});
 
 		// Save the new anime to the database

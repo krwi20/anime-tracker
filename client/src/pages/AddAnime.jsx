@@ -37,6 +37,8 @@ const AddAnime = () => {
 	});
 	// State to store the image file
 	const [imageFile, setImageFile] = useState(null);
+	// State to store the uploaded image temporarily to show the user the new image
+	const [temporaryImageURL, setTemporaryImageURL] = useState(null);
 
 	// Function to handle the input changes in the form
 	const handleChange = (e) => {
@@ -113,13 +115,26 @@ const AddAnime = () => {
 		e.preventDefault();
 
 		try {
-			// Create a new FormData object to send data as a multipart/form-data for the image file
+			// Create a new FormData object to send data as multipart/form-data for the image file
 			const formDataWithImage = new FormData();
 			// Iterate over the properties of formData
 			Object.entries(formData).forEach(([key, value]) => {
-				formDataWithImage.append(key, value);
+				// If the value is an object (specifically "broadcast"), append its properties individually
+				if (key === "broadcast") {
+					const { day, time, timezone } = value;
+					formDataWithImage.append("broadcast[day]", day);
+					formDataWithImage.append("broadcast[time]", time);
+					formDataWithImage.append("broadcast[timezone]", timezone);
+				} else if (Array.isArray(value)) {
+					// If the value is an array, append each element individually
+					value.forEach((item) => {
+						formDataWithImage.append(key, item);
+					});
+				} else {
+					formDataWithImage.append(key, value);
+				}
 			});
-			// Change the customImageURL property to the FormData - using the selected image file
+			// Change the customImageURL property in FormData using the selected image file
 			formDataWithImage.append("customImageURL", imageFile);
 			// Backend fetch to add the anime to the database
 			const response = await fetch(
@@ -138,11 +153,15 @@ const AddAnime = () => {
 				persistor.purge(["user"]);
 				navigate("/login");
 			}
+			// Clear the temporary image display
+			setTemporaryImageURL(null);
 			// If the request is successful, redirect back to homepage
 			navigate("/");
 		} catch (error) {
 			// Console log any errors during the fetch
 			console.log(error);
+			// Clear the temporary image display
+			setTemporaryImageURL(null);
 		}
 	};
 
@@ -180,11 +199,23 @@ const AddAnime = () => {
 						</label>
 						<label className='flex flex-col'>
 							Image:
+							<img
+								src={
+									temporaryImageURL ||
+									`https://wrki20-anime-track.s3.eu-central-1.amazonaws.com/NoImage.png`
+								}
+								className='w-[255px] h-[318px] object-cover'
+								alt=''
+							/>
 							<input
 								type='file'
 								id='customImageURL'
-								className='rounded-md bg-gray-800 p-2'
-								onChange={(e) => setImageFile(e.target.files[0])}
+								accept='image/jpeg, image/png'
+								className='rounded-md bg-gray-800 p-2 mt-4'
+								onChange={(e) => {
+									setImageFile(e.target.files[0]);
+									setTemporaryImageURL(URL.createObjectURL(e.target.files[0]));
+								}}
 							/>
 						</label>
 						<label className='flex flex-col'>
