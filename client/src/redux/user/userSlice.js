@@ -40,7 +40,6 @@ const userSlice = createSlice({
 			state.error = action.payload;
 		},
 		// Actions for updating user data
-
 		updateUserStart: (state) => {
 			state.loading = true;
 		},

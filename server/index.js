@@ -3,10 +3,11 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client } from "@aws-sdk/client-s3";
 
 import authRoutes from "./routes/auth.js";
 import animeRoutes from "./routes/anime.js";
+import mangaRoutes from "./routes/manga.js";
 
 // Load environment variables from the .env file
 dotenv.config();
@@ -53,6 +54,7 @@ app.listen(3001, () => {
 // Define routes for authentication and anime-related actions
 app.use("/api/auth", authRoutes);
 app.use("/api/anime", animeRoutes);
+app.use("/api/manga", mangaRoutes);
 
 // Error handling middleware for handling errors in the application (general catch-all for unhandled cases)
 app.use((err, req, res, next) => {

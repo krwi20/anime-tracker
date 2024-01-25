@@ -11,6 +11,10 @@ import Settings from "./pages/Settings";
 import EditAnime from "./pages/EditAnime";
 import AddAnime from "./pages/AddAnime";
 import AnimeList from "./pages/AnimeList";
+import Manga from "./pages/Manga";
+import AddManga from "./pages/AddManga";
+import EditManga from "./pages/EditManga";
+import MangaList from "./pages/MangaList";
 
 function App() {
 	return (
@@ -30,6 +34,10 @@ function App() {
 					<Route index element={<AddAnime />} />
 				</Route>
 				<Route path='/:username/anime-list' element={<AnimeList />} />
+				<Route path='/manga/:id' element={<Manga />} />
+				<Route path='/add/manga' element={<AddManga />} />
+				<Route path='/edit/manga/:id' element={<EditManga />} />
+				<Route path='/:username/manga-list' element={<MangaList />} />
 			</Routes>
 		</BrowserRouter>
 	);

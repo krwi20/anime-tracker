@@ -93,12 +93,21 @@ const NavBar = () => {
 						{/* If the current user is an admin, display these features */}
 						{currentUser?.role === "admin" && (
 							// Button to add an anime to the database
-							<button
-								className='px-5 py-2.5 text-sm rounded-md bg-gray-800 text-white hover:bg-purple-600'
-								onClick={() => navigate("/add/anime")}
-							>
-								Add Anime
-							</button>
+							<div className='flex gap-4'>
+								<button
+									className='px-5 py-2.5 text-sm rounded-md bg-gray-800 text-white hover:bg-purple-600'
+									onClick={() => navigate("/add/anime")}
+								>
+									Add Anime
+								</button>
+								{/* Button to add an Manga to the database */}
+								<button
+									className='px-5 py-2.5 text-sm rounded-md bg-gray-800 text-white hover:bg-purple-600'
+									onClick={() => navigate("/add/manga")}
+								>
+									Add Manga
+								</button>
+							</div>
 						)}
 						{/* If there is a user logged in, show their username else show Sign In */}
 						{currentUser ? (

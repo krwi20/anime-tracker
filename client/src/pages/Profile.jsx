@@ -21,6 +21,8 @@ const Profile = () => {
 	);
 	// State to manage the anime edit updates
 	const [singleTest, setSingleTest] = useState([]);
+	// State to manage the Manga edit updates
+	const [singleTest2, setSingleTest2] = useState([]);
 
 	// Fetch user data
 	useEffect(() => {
@@ -53,6 +55,19 @@ const Profile = () => {
 				const animeData = await Promise.all(animeDataPromises);
 				// Set the state with the fetched data
 				setSingleTest(animeData);
+				// Obtain the manga IDs of the 3 most recent tracked manga
+				const recentMangaIds = Object.keys(data.trackedManga || {})
+					.sort(
+						(a, b) =>
+							new Date(data.trackedManga[b].timeUpdated).getTime() -
+							new Date(data.trackedManga[a].timeUpdated).getTime()
+					)
+					.slice(0, 3);
+				// Fetch specific data from the most recent IDs
+				const mangaDataPromises = recentMangaIds.map(fetchSpecificManga);
+				const mangaData = await Promise.all(mangaDataPromises);
+				// Set the state with the fetched data
+				setSingleTest2(mangaData);
 				//  If the request is unsuccessful dispatch the failure "User not found!" redirect to homepage
 				if (data.success === false) {
 					dispatch(getUserFailure("User not found!"));
@@ -89,6 +104,29 @@ const Profile = () => {
 		} catch (error) {
 			// Console log the error
 			console.error("Error fetching specific anime:", error);
+		}
+	};
+
+	// Function to fetch the specific manga
+	const fetchSpecificManga = async (mangaId) => {
+		try {
+			// Backend fetch to get the specific manga
+			const response = await fetch(
+				`http://localhost:3001/api/manga/manga/${mangaId}`,
+				{
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+					},
+				}
+			);
+			// Parse the data from the response
+			const data = await response.json();
+			// Return the data
+			return data;
+		} catch (error) {
+			// Console log the error
+			console.error("Error fetching specific manga:", error);
 		}
 	};
 
@@ -165,6 +203,7 @@ const Profile = () => {
 												</p>
 											</div>
 										</div>
+										{/* Anime Stats */}
 										<div className='bg-gray-800 rounded-lg p-4 mb-6 space-y-6'>
 											<hr className='border-t border-gray-600 mb-4' />
 											<h1 className='text-2xl font-bold mb-4'>Anime Stats</h1>
@@ -274,6 +313,128 @@ const Profile = () => {
 												</p>
 											</div>
 										</div>
+										{/* Manga Stats */}
+										<div className='bg-gray-800 rounded-lg p-4 mb-6 space-y-6'>
+											<hr className='border-t border-gray-600 mb-4' />
+											<h1 className='text-2xl font-bold mb-4'>Manga Stats</h1>
+											<div className='relative pt-1'>
+												<div className='overflow-hidden h-4 mb-2 text-xs flex bg-emerald-200'>
+													{[
+														"Reading",
+														"Completed",
+														"On Hold",
+														"Dropped",
+														"Plan to read",
+													].map((status, index) => (
+														<div
+															key={index}
+															style={{
+																width: `${
+																	(Object.values(
+																		fetchedUser.trackedManga || {}
+																	).filter((manga) => manga.status === status)
+																		.length /
+																		Object.values(
+																			fetchedUser.trackedManga || {}
+																		).length) *
+																	100
+																}%`,
+															}}
+															className={`shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center ${
+																status === "Reading"
+																	? "bg-green-500"
+																	: status === "Completed"
+																	? "bg-blue-500"
+																	: status === "On Hold"
+																	? "bg-yellow-500"
+																	: status === "Dropped"
+																	? "bg-red-500"
+																	: status === "Plan to read"
+																	? "bg-gray-200"
+																	: ""
+															}`}
+														></div>
+													))}
+												</div>
+												<div className='flex justify-center text-xs mb-4 space-x-4'>
+													{[
+														"Reading",
+														"Completed",
+														"On Hold",
+														"Dropped",
+														"Plan to read",
+													].map((status, index) => (
+														<div
+															key={index}
+															className={`flex items-center ${
+																status === "Reading"
+																	? "text-green-500"
+																	: status === "Completed"
+																	? "text-blue-500"
+																	: status === "On Hold"
+																	? "text-yellow-500"
+																	: status === "Dropped"
+																	? "text-red-500"
+																	: status === "Plan to read"
+																	? "text-gray-200"
+																	: ""
+															}`}
+														>
+															<div
+																className={`bg-${
+																	status === "Reading"
+																		? "green-600"
+																		: status === "Completed"
+																		? "blue-500"
+																		: status === "On Hold"
+																		? "yellow-500"
+																		: status === "Dropped"
+																		? "red-600"
+																		: status === "Plan to read"
+																		? "gray-200"
+																		: ""
+																} h-3 w-3 rounded-full mr-2`}
+															></div>
+															<p>{status}</p>
+														</div>
+													))}
+												</div>
+											</div>
+											<div className='flex justify-between text-sm'>
+												<div className='flex flex-col'>
+													<p>
+														Total Entries:{" "}
+														{
+															Object.values(fetchedUser?.trackedManga || {})
+																.length
+														}
+													</p>
+													<p>Rewatched: 0</p>
+												</div>
+												<div className='flex flex-col'>
+													<p>
+														Chapters Read:{" "}
+														{Object.values(
+															fetchedUser?.trackedManga || {}
+														).reduce(
+															(total, manga) =>
+																total + (manga.chaptersRead || 0),
+															0
+														)}
+													</p>
+													<p>
+														Volumes Read:{" "}
+														{Object.values(
+															fetchedUser?.trackedManga || {}
+														).reduce(
+															(total, manga) =>
+																total + (manga.volumesRead || 0),
+															0
+														)}
+													</p>
+												</div>
+											</div>
+										</div>
 									</div>
 									<div className='flex space-x-4 mb-6'>
 										<button
@@ -284,7 +445,12 @@ const Profile = () => {
 										>
 											Anime List
 										</button>
-										<button className='bg-gray-800 rounded-md flex-grow px-4 py-2 hover:bg-blue-600'>
+										<button
+											className='bg-gray-800 rounded-md flex-grow px-4 py-2 hover:bg-blue-600'
+											onClick={() =>
+												navigate(`/${fetchedUser.username}/manga-list`)
+											}
+										>
 											Manga List
 										</button>
 									</div>
@@ -295,6 +461,7 @@ const Profile = () => {
 											{fetchedUser.biography || "No biography yet."}
 										</p>
 									</div>
+									{/* Anime */}
 									<div>
 										<h2 className='text-2xl font-bold mb-4'>
 											Recent Anime Updates
@@ -448,6 +615,170 @@ const Profile = () => {
 																	/{anime?.episodes} · Rating{" "}
 																	{
 																		fetchedUser?.trackedAnime[anime?._id]
+																			?.rating
+																	}
+																</p>
+															</div>
+														</div>
+													</div>
+												</ul>
+											))}
+										</div>
+									</div>
+									{/* Manga */}
+									<div>
+										<h2 className='text-2xl font-bold mb-4'>
+											Recent Manga Updates
+										</h2>
+										<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+											{singleTest2.map((manga, index) => (
+												<ul key={index} className='mb-4'>
+													<div className='flex items-stretch'>
+														<div className='flex flex-grow'>
+															<img
+																src={manga?.customImageURL}
+																alt=''
+																className='h-16 w-12 cursor-pointer'
+																onClick={() => navigate(`/manga/${manga._id}`)}
+															/>
+															<div className='flex flex-col px-2 text-xs flex-grow justify-between'>
+																<p
+																	className='cursor-pointer'
+																	onClick={() =>
+																		navigate(`/manga/${manga._id}`)
+																	}
+																>
+																	{manga?.title}
+																</p>
+																<div className='flex gap-4 items-center'>
+																	{fetchedUser?.trackedManga[manga?._id]
+																		?.status === "Reading" ? (
+																		<div className='w-full bg-gray-200 h-3 dark:bg-gray-700'>
+																			<div
+																				className='bg-green-600 h-3 dark:bg-green-500'
+																				style={{
+																					width: `${
+																						fetchedUser?.trackedManga[
+																							manga?._id
+																						]?.chaptersRead !== null &&
+																						manga?.chapters !== null
+																							? ((fetchedUser?.trackedManga[
+																									manga?._id
+																							  ]?.chaptersRead || 0) /
+																									manga?.chapters) *
+																							  100
+																							: 50
+																					}%`,
+																				}}
+																			></div>
+																		</div>
+																	) : fetchedUser?.trackedManga[manga?._id]
+																			?.status === "On Hold" ? (
+																		<div className='w-full bg-gray-200 h-3 dark:bg-gray-700'>
+																			<div
+																				className='bg-yellow-400 h-3'
+																				style={{
+																					width: `${
+																						fetchedUser?.trackedManga[
+																							manga?._id
+																						]?.chaptersRead !== null &&
+																						manga?.chapters !== null
+																							? ((fetchedUser?.trackedManga[
+																									manga?._id
+																							  ]?.chaptersRead || 0) /
+																									manga?.chapters) *
+																							  100
+																							: 50
+																					}%`,
+																				}}
+																			></div>
+																		</div>
+																	) : fetchedUser?.trackedManga[manga?._id]
+																			?.status === "Dropped" ? (
+																		<div className='w-full bg-gray-200 h-3 dark:bg-gray-700'>
+																			<div
+																				className='bg-red-600 h-3 dark:bg-red-500'
+																				style={{
+																					width: `${
+																						fetchedUser?.trackedManga[
+																							manga?._id
+																						]?.chaptersRead !== null &&
+																						manga?.chapters !== null
+																							? ((fetchedUser?.trackedManga[
+																									manga?._id
+																							  ]?.chaptersRead || 0) /
+																									manga?.chapters) *
+																							  100
+																							: 50
+																					}%`,
+																				}}
+																			></div>
+																		</div>
+																	) : fetchedUser?.trackedManga[manga?._id]
+																			?.status === "Plan to read" ? (
+																		<div className='w-full bg-gray-200 h-3 dark:bg-gray-700'>
+																			<div
+																				className='bg-gray-600 h-3 dark:bg-gray-500'
+																				style={{
+																					width: `${
+																						fetchedUser?.trackedManga[
+																							manga?._id
+																						]?.chaptersRead !== null &&
+																						manga?.chapters !== null
+																							? ((fetchedUser?.trackedManga[
+																									manga?._id
+																							  ]?.chaptersRead || 0) /
+																									manga?.chapters) *
+																							  100
+																							: 50
+																					}%`,
+																				}}
+																			></div>
+																		</div>
+																	) : (
+																		<div className='w-full bg-gray-200 h-3 dark:bg-gray-700'>
+																			<div
+																				className='bg-blue-600 h-3 dark:bg-blue-500'
+																				style={{
+																					width: `${
+																						fetchedUser?.trackedManga[
+																							manga?._id
+																						]?.chaptersRead !== null &&
+																						manga?.chapters !== null
+																							? ((fetchedUser?.trackedManga[
+																									manga?._id
+																							  ]?.chaptersRead || 0) /
+																									manga?.chapters) *
+																							  100
+																							: 100
+																					}%`,
+																				}}
+																			></div>
+																		</div>
+																	)}
+																	<p>
+																		{new Date(
+																			fetchedUser?.trackedManga[
+																				manga?._id
+																			]?.timeUpdated
+																		).toLocaleTimeString()}
+																	</p>
+																</div>
+																<p>
+																	{
+																		fetchedUser?.trackedManga[manga?._id]
+																			?.status
+																	}{" "}
+																	-{" "}
+																	<span className='font-bold'>
+																		{
+																			fetchedUser?.trackedManga[manga?._id]
+																				?.chaptersRead
+																		}
+																	</span>
+																	/{manga?.chapters} · Rating{" "}
+																	{
+																		fetchedUser?.trackedManga[manga?._id]
 																			?.rating
 																	}
 																</p>

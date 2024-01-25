@@ -67,4 +67,5 @@ export const {
 	updateSpecificAnimeSuccess,
 	updateSpecificAnimeFailure,
 } = animeSlice.actions;
+
 export default animeSlice.reducer;

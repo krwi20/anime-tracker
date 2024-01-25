@@ -57,6 +57,36 @@ const userSchema = new mongoose.Schema(
 			},
 			default: {},
 		},
+		trackedManga: {
+			type: Map,
+			of: {
+				status: {
+					type: String,
+					enum: ["Reading", "Completed", "Dropped", "On Hold", "Plan to read"],
+					required: true,
+				},
+				chaptersRead: {
+					type: Number,
+					default: 0,
+					required: true,
+				},
+				volumesRead: {
+					type: Number,
+					default: 0,
+					required: true,
+				},
+				timeUpdated: {
+					type: Date,
+					required: true,
+				},
+				rating: {
+					type: Number,
+					required: false,
+					default: 0,
+				},
+			},
+			default: {},
+		},
 	},
 
 	{ timestamps: true }

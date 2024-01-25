@@ -97,6 +97,33 @@ export const addTrackedAnime = async (req, res, next) => {
 	}
 };
 
+// Add tracked manga to user's profile
+export const addTrackedManga = async (req, res, next) => {
+	try {
+		const { userId, mangaId, status, timeUpdated } = req.body;
+
+		// Define update object for MongoDB
+		const updateObj = {
+			$set: {
+				[`trackedManga.${mangaId}.mangaId`]: mangaId,
+				[`trackedManga.${mangaId}.status`]: status,
+				[`trackedManga.${mangaId}.timeUpdated`]: timeUpdated,
+			},
+		};
+
+		// Update user's profile with the tracked manga information
+		await User.findByIdAndUpdate(userId, updateObj, { new: true });
+
+		// Retrieve and send updated user data as a response
+		const updatedUser = await User.findById(userId);
+		res
+			.status(200)
+			.json({ message: "Manga added to trackedManga", updatedUser });
+	} catch (error) {
+		next(error);
+	}
+};
+
 // Remove tracked anime from user's profile
 export const removeTrackedAnime = async (req, res, next) => {
 	//get the user and anime ids from the url
@@ -117,6 +144,36 @@ export const removeTrackedAnime = async (req, res, next) => {
 		await User.findByIdAndUpdate(
 			userId,
 			{ $unset: { [`trackedAnime.${animeId}`]: 1 } },
+			{ new: true }
+		);
+		// Retrieve and update the user data
+		const updatedUser = await User.findById(userId);
+		res.status(200).json(updatedUser);
+	} catch (error) {
+		next(error);
+	}
+};
+
+// Remove tracked manga from user's profile
+export const removeTrackedManga = async (req, res, next) => {
+	//get the user and manga ids from the url
+	const userId = req.params.userId;
+	const mangaId = req.params.mangaId;
+
+	// Check if the user is trying to remove tracked manga from their own profile
+	if (req.user.id !== userId) {
+		return res.status(403).json({
+			success: false,
+			message:
+				"Forbidden - You can only remove tracked manga from your own profile",
+		});
+	}
+
+	// Update the user's profile to remove the tracked manga
+	try {
+		await User.findByIdAndUpdate(
+			userId,
+			{ $unset: { [`trackedManga.${mangaId}`]: 1 } },
 			{ new: true }
 		);
 		// Retrieve and update the user data
@@ -162,6 +219,41 @@ export const updateTrackedAnime = async (req, res, next) => {
 	}
 };
 
+// Update tracked manga information
+export const updateTrackedManga = async (req, res, next) => {
+	try {
+		const { userId, mangaId, rating, timeUpdated } = req.body;
+
+		// Convert rating to a number
+		const ratingNumber = parseFloat(rating);
+
+		// Define update object for MongoDB
+		const updateObj = {
+			$set: {
+				[`trackedManga.${mangaId}.rating`]: ratingNumber,
+				[`trackedManga.${mangaId}.timeUpdated`]: timeUpdated,
+			},
+		};
+
+		// Update user's profile with the new rating for the tracked manga
+		const updatedUser = await User.findByIdAndUpdate(userId, updateObj, {
+			new: true,
+		});
+
+		// If the user is not found, throw an error
+		if (!updatedUser) {
+			const error = new Error("User not found");
+			error.statusCode = 404;
+			throw error;
+		}
+
+		// Send a response with a success message and updated user data
+		res.status(200).json({ message: "Manga rating updated", updatedUser });
+	} catch (error) {
+		next(error);
+	}
+};
+
 // Update tracked anime's rating in user's profile
 export const updateEpisodesWatched = async (req, res, next) => {
 	try {
@@ -184,6 +276,60 @@ export const updateEpisodesWatched = async (req, res, next) => {
 
 		// Send a response with a success message and updated user data
 		res.status(200).json({ message: "Anime rating updated", updatedUser });
+	} catch (error) {
+		next(error);
+	}
+};
+
+// Update tracked chapters's read in user's profile
+export const updateChaptersRead = async (req, res, next) => {
+	try {
+		const { userId, mangaId, chaptersRead, timeUpdated } = req.body;
+		// Convert episodes watched to a number
+		const chapterNumber = parseFloat(chaptersRead);
+
+		// Define update object for MongoDB
+		const updateObj = {
+			$set: {
+				[`trackedManga.${mangaId}.chaptersRead`]: chapterNumber,
+				[`trackedManga.${mangaId}.timeUpdated`]: timeUpdated,
+			},
+		};
+
+		// Update user's profile with the new episodes watched for the tracked anime
+		await User.findByIdAndUpdate(userId, updateObj, { new: true });
+		// Retrieve and send updated user data as a response
+		const updatedUser = await User.findById(userId);
+
+		// Send a response with a success message and updated user data
+		res.status(200).json({ message: "Manga rating updated", updatedUser });
+	} catch (error) {
+		next(error);
+	}
+};
+
+// Update tracked chapters's read in user's profile
+export const updateVolumesRead = async (req, res, next) => {
+	try {
+		const { userId, mangaId, volumesRead, timeUpdated } = req.body;
+		// Convert episodes watched to a number
+		const volumeNumber = parseFloat(volumesRead);
+
+		// Define update object for MongoDB
+		const updateObj = {
+			$set: {
+				[`trackedManga.${mangaId}.volumesRead`]: volumeNumber,
+				[`trackedManga.${mangaId}.timeUpdated`]: timeUpdated,
+			},
+		};
+
+		// Update user's profile with the new episodes watched for the tracked anime
+		await User.findByIdAndUpdate(userId, updateObj, { new: true });
+		// Retrieve and send updated user data as a response
+		const updatedUser = await User.findById(userId);
+
+		// Send a response with a success message and updated user data
+		res.status(200).json({ message: "Manga rating updated", updatedUser });
 	} catch (error) {
 		next(error);
 	}
