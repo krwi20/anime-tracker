@@ -479,7 +479,6 @@ const Anime = () => {
 									<div className='flex flex-col'>
 										<span className='text-lg font-bold'>Your Rating:</span>
 										<div className='flex mt-2 space-x-4'>
-											{/* TODO - ADD OPTION TO REMOVE RATING */}
 											{/* Rating options */}
 											{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
 												<button
@@ -494,6 +493,12 @@ const Anime = () => {
 													{num}
 												</button>
 											))}
+											<button
+												onClick={() => updateAnimeRating("0")}
+												className={`px-5 py-2.5 transition-all ease-in duration-75 bg-gray-800 rounded-md hover:bg-purple-600`}
+											>
+												Remove
+											</button>
 										</div>
 									</div>
 									{/* Episodes watched section */}

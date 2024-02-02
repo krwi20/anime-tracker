@@ -1,6 +1,7 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import Anime from "../models/anime.js";
 import { s3 } from "../index.js";
+import User from "../models/user.js";
 
 // Get all the anime
 export const anime = async (req, res, next) => {
@@ -159,6 +160,13 @@ export const addAnime = async (req, res, next) => {
 export const deleteAnime = async (req, res, next) => {
 	try {
 		const deleteAnime = await Anime.findByIdAndDelete(req.params.id);
+
+		// Update all users to remove the deleted anime from their trackedAnime
+		await User.updateMany(
+			{ [`trackedAnime.${req.params.id}`]: { $exists: true } },
+			{ $unset: { [`trackedAnime.${req.params.id}`]: "" } }
+		);
+
 		res.status(201).json(deleteAnime);
 	} catch (error) {
 		next(error);

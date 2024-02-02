@@ -1,6 +1,7 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import Manga from "../models/manga.js";
 import { s3 } from "../index.js";
+import User from "../models/user.js";
 
 // Get all the manga
 export const manga = async (req, res, next) => {
@@ -144,6 +145,13 @@ export const addManga = async (req, res, next) => {
 export const deleteManga = async (req, res, next) => {
 	try {
 		const deleteManga = await Manga.findByIdAndDelete(req.params.id);
+
+		// Update all users to remove the deleted manga from their trackedManga
+		await User.updateMany(
+			{ [`trackedManga.${req.params.id}`]: { $exists: true } },
+			{ $unset: { [`trackedManga.${req.params.id}`]: "" } }
+		);
+
 		res.status(201).json(deleteManga);
 	} catch (error) {
 		next(error);
