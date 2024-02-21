@@ -15,12 +15,20 @@ import {
 	updateUserFailure,
 	signOut,
 } from "../redux/user/userSlice";
+import {
+	getAllCharactersStart,
+	getAllCharactersSuccess,
+	getAllCharactersFailure,
+} from "../redux/characters/charactersSlice";
 
 const Anime = () => {
 	// Extract the id from the url params
 	const { id } = useParams();
 	// Redux state - gets anime and user information
 	const { fetchedSpecificAnime, loading } = useSelector((state) => state.anime);
+	const { fetchedAllCharacters, charLoading } = useSelector(
+		(state) => state.characters
+	);
 	const { currentUser } = useSelector((state) => state.user);
 	// Redux dispatch hook
 	const dispatch = useDispatch();
@@ -70,6 +78,41 @@ const Anime = () => {
 		// Call the fetch specific anime function
 		fetchSpecificAnime();
 	}, [dispatch, id]);
+
+	// Fetch all character data
+	useEffect(() => {
+		const fetchCharacters = async () => {
+			try {
+				// Redux store - dispatch action to start getting all characters
+				dispatch(getAllCharactersStart());
+				// Backend fetch to get all the characters from database
+				const response = await fetch(
+					`http://localhost:3001/api/characters/characters`,
+					{
+						method: "GET",
+						headers: {
+							"Content-Type": "application/json",
+						},
+					}
+				);
+				// Parse the data from the response
+				const data = await response.json();
+				// If the request is unsuccessful dispatch the failure with the data
+				if (data.success === false) {
+					dispatch(getAllCharactersFailure(data));
+					console.log("fail", charLoading);
+					return;
+				}
+				// If the request is successful dispatch the success with the data
+				dispatch(getAllCharactersSuccess(data));
+			} catch (error) {
+				// If the request has en error dispatch the failure with the error
+				dispatch(getAllCharactersFailure(error));
+			}
+		};
+		// Call function to fetch characters
+		fetchCharacters();
+	}, [dispatch]);
 
 	// Function to add anime to the user's tracked anime
 	const trackAnime = async (status) => {
@@ -553,6 +596,55 @@ const Anime = () => {
 												</button>
 											)}
 										</div>
+									</div>
+									{/* Characters actions section */}
+									<div className='flex flex-col'>
+										<div className='border-b-2 border-gray-700 flex justify-between items-center'>
+											<span className='text-lg font-bold mt-4'>
+												Characters:
+											</span>
+											<div className='flex gap-4'>
+												<button
+													className='text-sm text-gray-400 hover:text-white'
+													onClick={() =>
+														navigate(`/edit/anime/${id}/characters`)
+													}
+												>
+													Edit
+												</button>
+												<button className='text-sm text-gray-400 hover:text-white'>
+													View More
+												</button>
+											</div>
+										</div>
+										{/* Loading spinner while being fetched */}
+										{charLoading ? (
+											<div className='flex items-center justify-center h-full'>
+												<div className='animate-spin rounded-full border-t-2 border-b-2 border-[#8A4FFF] h-12 w-12'></div>
+											</div>
+										) : (
+											<div className='flex flex-row gap-4 mt-4'>
+												{fetchedAllCharacters
+													.filter((character) =>
+														character.animeAppearences.includes(id)
+													)
+													.map((filteredCharacter) => (
+														<div
+															key={filteredCharacter._id}
+															className='bg-gray-800 p-4 rounded-lg flex flex-col items-center justify-center w-[150px] hover:bg-blue-500'
+														>
+															<img
+																src={filteredCharacter.customImageURL}
+																alt={filteredCharacter.name}
+																className='object-cover rounded-md w-24 h-32 mb-2'
+															/>
+															<h2 className='text-white text-center'>
+																{filteredCharacter.name}
+															</h2>
+														</div>
+													))}
+											</div>
+										)}
 									</div>
 								</div>
 							</div>

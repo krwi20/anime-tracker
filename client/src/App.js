@@ -15,6 +15,8 @@ import Manga from "./pages/Manga";
 import AddManga from "./pages/AddManga";
 import EditManga from "./pages/EditManga";
 import MangaList from "./pages/MangaList";
+import EditCharacters from "./pages/EditCharacters";
+import AddCharacter from "./pages/AddCharacter";
 
 function App() {
 	return (
@@ -38,6 +40,8 @@ function App() {
 				<Route path='/add/manga' element={<AddManga />} />
 				<Route path='/edit/manga/:id' element={<EditManga />} />
 				<Route path='/:username/manga-list' element={<MangaList />} />
+				<Route path='/edit/anime/:id/characters' element={<EditCharacters />} />
+				<Route path='/characters/add' element={<AddCharacter />} />
 			</Routes>
 		</BrowserRouter>
 	);

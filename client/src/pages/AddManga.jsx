@@ -16,7 +16,7 @@ const AddManga = () => {
 		title_jp: "",
 		description: "Description not currently created...",
 		customImageURL:
-			"https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg",
+			"https://wrki20-anime-track.s3.eu-central-1.amazonaws.com/NoImage.png",
 		type: "",
 		chapters: 0,
 		volumes: 0,

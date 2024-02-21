@@ -107,6 +107,13 @@ const NavBar = () => {
 								>
 									Add Manga
 								</button>
+								{/* Button to add a Character to the database */}
+								<button
+									className='px-5 py-2.5 text-sm rounded-md bg-gray-800 text-white hover:bg-purple-600'
+									onClick={() => navigate("/characters/add")}
+								>
+									Add Character
+								</button>
 							</div>
 						)}
 						{/* If there is a user logged in, show their username else show Sign In */}

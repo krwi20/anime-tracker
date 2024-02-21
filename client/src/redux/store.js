@@ -10,12 +10,14 @@ import storage from "redux-persist/lib/storage";
 import userReducer from "./user/userSlice";
 import animeReducer from "./anime/animeSlice";
 import mangaReducer from "./manga/mangaSlice";
+import characterReducer from "./characters/charactersSlice";
 
 // Combine the user, anime & manga reducers into a root reducer
 const rootReducer = combineReducers({
 	user: userReducer,
 	anime: animeReducer,
 	manga: mangaReducer,
+	characters: characterReducer,
 });
 
 // Configuration for Redux Persist

@@ -14,11 +14,19 @@ import {
 	getAllMangaFailure,
 } from "../redux/manga/mangaSlice";
 
+import {
+	getAllCharactersStart,
+	getAllCharactersSuccess,
+	getAllCharactersFailure,
+} from "../redux/characters/charactersSlice";
+
 const Home = () => {
 	// Redux state - gets anime information
 	const { fetchedAllAnime, loading } = useSelector((state) => state.anime);
 	// Redux state - gets manga information
 	const { fetchedAllManga } = useSelector((state) => state.manga);
+	// Redux state - gets manga information
+	const { fetchedAllCharacters } = useSelector((state) => state.characters);
 	// Redux dispatch hook
 	const dispatch = useDispatch();
 
@@ -84,6 +92,40 @@ const Home = () => {
 		};
 		// Call function to fetch manga
 		fetchManga();
+	}, [dispatch]);
+
+	// Fetch all character data
+	useEffect(() => {
+		const fetchCharacters = async () => {
+			try {
+				// Redux store - dispatch action to start getting all characters
+				dispatch(getAllCharactersStart());
+				// Backend fetch to get all the characters from database
+				const response = await fetch(
+					`http://localhost:3001/api/characters/characters`,
+					{
+						method: "GET",
+						headers: {
+							"Content-Type": "application/json",
+						},
+					}
+				);
+				// Parse the data from the response
+				const data = await response.json();
+				// If the request is unsuccessful dispatch the failure with the data
+				if (data.success === false) {
+					dispatch(getAllCharactersFailure(data));
+					return;
+				}
+				// If the request is successful dispatch the success with the data
+				dispatch(getAllCharactersSuccess(data));
+			} catch (error) {
+				// If the request has en error dispatch the failure with the error
+				dispatch(getAllCharactersFailure(error));
+			}
+		};
+		// Call function to fetch characters
+		fetchCharacters();
 	}, [dispatch]);
 
 	// Function to get the current season

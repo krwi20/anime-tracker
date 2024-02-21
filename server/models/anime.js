@@ -13,7 +13,7 @@ const animeSchema = new mongoose.Schema({
 	customImageURL: {
 		type: String,
 		default:
-			"https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg",
+			"https://wrki20-anime-track.s3.eu-central-1.amazonaws.com/NoImage.png",
 	},
 	type: {
 		type: String,
